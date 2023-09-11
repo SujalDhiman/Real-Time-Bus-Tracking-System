@@ -20,7 +20,7 @@ const router=createBrowserRouter([
         element:<Gotdetails />
       },
       {
-        path:"/bus/:id",
+        path:"/activeBus/:id",
         element:<Properdetails />
       }
 

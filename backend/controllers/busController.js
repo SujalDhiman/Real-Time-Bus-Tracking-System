@@ -66,3 +66,15 @@ exports.updateBusDetails=async function(req,res){
         })
     }
 }
+
+exports.activeBusDetails=async function(req,res)
+{
+    const {id}=req.params
+    
+    //getting bus with the id
+    const bus=await busSchema.findById(id);
+
+    res.status(200).json({
+        bus
+    })
+}

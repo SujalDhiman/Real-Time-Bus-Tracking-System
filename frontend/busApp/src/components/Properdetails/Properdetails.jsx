@@ -21,13 +21,14 @@ function Card({busNumber,busNumberPlate,contactInfo,startingLocation,destination
 export function Properdetails()
 {
     const {id}=useParams()
-    const [dataReceived,setDataReceived]=useState([])
+    const [dataReceived,setDataReceived]=useState({})
     const [isLoading,setLoading]=useState(true)
     async function getActiveBusDetails()
     {
-        const response=await axios.get("http://127.0.0.1:10000/api/v1/activeBus")
-        console.log(response.data.buses)
-        setDataReceived(response.data.buses)
+        const response=await axios.get(`http://127.0.0.1:10000/api/v1/activeBus/${id}`)
+        console.log(response.data.bus)
+        // console.log(response.data.buses)
+        setDataReceived(response.data.bus)
         setLoading(false)
     }
     useEffect(()=>{
@@ -36,7 +37,7 @@ export function Properdetails()
 
     return (
         <div className="space-y-16">
-        {isLoading?<h1> Ruko Bhaiyo </h1>:dataReceived.map((ele)=><Card busNumber={ele.busNumber} busNumberPlate={ele.busNumberPlate} contactInfo={ele.driver.contactInfo} startingLocation={ele.startingPoint} destinationLocation={ele.destinationPoint} age={ele.driver.age} name={ele.driver.name} busStatus={ele.busStatus} key={ele._id} objectId={ele._id}/>)}
+        {isLoading?<h1> Ruko Bhaiyo </h1>:<Card busNumber={dataReceived.busNumber} busNumberPlate={dataReceived.busNumberPlate} contactInfo={dataReceived.driver.contactInfo} startingLocation={dataReceived.startingPoint} destinationLocation={dataReceived.destinationPoint} age={dataReceived.driver.age} name={dataReceived.driver.name} busStatus={dataReceived.busStatus} key={dataReceived._id} objectId={dataReceived._id}/>}
         </div>
     )
 }
