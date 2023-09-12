@@ -1,9 +1,10 @@
 require("dotenv").config()
 
-const app=require("./app.js")
+const httpServer=require("./app.js")
 
 
 
-app.listen(process.env.PORT,function(){
-    console.log("Server connected successfully")
-})
+httpServer.listen(10000,function ()
+{
+    console.log("Server is up")
+});

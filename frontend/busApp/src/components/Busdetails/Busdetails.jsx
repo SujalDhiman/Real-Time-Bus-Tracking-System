@@ -32,7 +32,7 @@ export function Busdetails()
             const response=await axios.post("http://127.0.0.1:10000/api/v1/details",obj)
 
             console.log(response)
-            navigate("/busDetails")
+            navigate(`/busgiveinformation/${response.data.createdBus._id}`)
 
         } catch (error) {
             console.log("An error occured")

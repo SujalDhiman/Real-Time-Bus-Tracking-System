@@ -6,6 +6,7 @@ import {RouterProvider,createBrowserRouter} from "react-router-dom"
 import { Busdetails } from './components/Busdetails/Busdetails.jsx'
 import { Gotdetails } from './components/Geodetails/Gotdetails.jsx'
 import { Properdetails } from './components/Properdetails/Properdetails.jsx'
+import BusGiveInformation from './components/BusGiveInformation/BusGiveInformation.jsx'
 const router=createBrowserRouter([
   {
     path:"/",
@@ -18,6 +19,10 @@ const router=createBrowserRouter([
       {
         path:"busDetails",
         element:<Gotdetails />
+      },
+      {
+        path:"busgiveinformation/:id",
+        element:<BusGiveInformation/>
       },
       {
         path:"/activeBus/:id",
