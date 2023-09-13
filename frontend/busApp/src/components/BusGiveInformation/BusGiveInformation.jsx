@@ -12,6 +12,8 @@ function Map()
 
     const [latitude,setLatitude]=useState(0);
     const [longitude,setLongitude]=useState(0);
+
+    //To prevent react batch rendering problems
     const differedLatitude = useDeferredValue(latitude);
     const differedLongitude = useDeferredValue(longitude);
 
@@ -37,6 +39,7 @@ function Map()
     },)
 
     useEffect(() => {
+        //Only emitting when there is a change in position
         socket.emit(`busId`,{latitude: differedLatitude, longitude: differedLongitude,id})
         console.log(differedLatitude, differedLongitude);
     }, [differedLatitude, differedLongitude])
