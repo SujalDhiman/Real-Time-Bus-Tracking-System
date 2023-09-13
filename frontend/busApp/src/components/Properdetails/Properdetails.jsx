@@ -1,10 +1,48 @@
-import { useState,useEffect } from "react"
+import { useState,useEffect,useContext } from "react"
 import axios from "axios"
 import {Link,useParams} from "react-router-dom"
+import {GoogleMap,MarkerF,useLoadScript} from "@react-google-maps/api"
+import { SocketContext } from "../../Context/SocketContext"
+import "./Properdetails.css"
+
+
+function Map()
+{
+    const socket =useContext(SocketContext)
+    const {id}=useParams()
+    const [latitude,setLatitide]=useState(0)
+    const [longitude,setLongitude]=useState(0)
+
+    useEffect(()=>{
+
+        socket.on(`busLocation-${id}`,(payload)=>{
+            console.log(payload)
+            setLatitide(payload.latitude)
+            setLongitude(payload.longitude)
+        })
+
+    },[latitude,longitude])
+
+
+
+
+    return (
+        <>
+        <div><h1 className="text-white">latitude :{latitude}  longitude : {longitude} </h1></div>
+            <GoogleMap zoom={10} center={{lat:latitude,lng:longitude}} mapContainerClassName="map-container">
+                <MarkerF position={{lat:latitude,lng:longitude}} />
+            </GoogleMap>
+        </>
+    )
+}
+
+
 
 function Card({busNumber,busNumberPlate,contactInfo,startingLocation,destinationLocation,age,name,busStatus})
 {
+
     return (
+        <>
         <div className="rounded-lg bg-slate-700 w-[400px] text-white">
             <h1>Bus Number :- {busNumber}</h1>
             <h1>Bus Number Plate :- {busNumberPlate}</h1>
@@ -15,11 +53,19 @@ function Card({busNumber,busNumberPlate,contactInfo,startingLocation,destination
             <h2>Destination Location :- {destinationLocation}</h2>
             <div className="flex">Bus Status :- &nbsp; {busStatus === "active"?<h1 className="w-[20px] h-[20px] rounded-full bg-green-600"></h1>:<h1 className="w-[20px] h-[20px]rounded-full bg-red-600"></h1>}</div>
         </div>
+        </>
     )
 }
 
 export function Properdetails()
 {
+
+    const {isLoaded}=useLoadScript({
+        googleMapsApiKey:"AIzaSyAnHMHMgI2JsOrNrmDO2VYNR6Dyw7qcpik"
+    })
+
+    const socket =useContext(SocketContext)
+
     const {id}=useParams()
     const [dataReceived,setDataReceived]=useState({})
     const [isLoading,setLoading]=useState(true)
@@ -32,12 +78,23 @@ export function Properdetails()
         setLoading(false)
     }
     useEffect(()=>{
+        console.log(`busLocation-${id}`)
+        socket.on(`busLocation-${id}`,(payload)=>{
+            console.log(payload)
+        })
         getActiveBusDetails()
     },[])
 
+    if(!isLoaded) return <h1>Ruko Yaar</h1>
+    else
+    {
     return (
+        <>
         <div className="space-y-16">
         {isLoading?<h1> Ruko Bhaiyo </h1>:<Card busNumber={dataReceived.busNumber} busNumberPlate={dataReceived.busNumberPlate} contactInfo={dataReceived.driver.contactInfo} startingLocation={dataReceived.startingPoint} destinationLocation={dataReceived.destinationPoint} age={dataReceived.driver.age} name={dataReceived.driver.name} busStatus={dataReceived.busStatus} key={dataReceived._id} objectId={dataReceived._id}/>}
         </div>
+        <Map />
+        </>
     )
+    }
 }

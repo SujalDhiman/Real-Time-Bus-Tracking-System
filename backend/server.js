@@ -1,7 +1,10 @@
 require("dotenv").config()
 
-const server=require("./socket.js")
+const httpServer=require("./app.js")
 
-server.listen(process.env.PORT,function(){
-    console.log("Server connected successfully")
-})
+
+
+httpServer.listen(10000,function ()
+{
+    console.log("Server is up")
+});
