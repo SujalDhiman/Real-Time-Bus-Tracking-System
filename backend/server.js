@@ -4,7 +4,7 @@ const httpServer=require("./app.js")
 
 
 
-httpServer.listen(10000,function ()
+httpServer.listen(process.env.PORT,function ()
 {
     console.log("Server is up")
 });

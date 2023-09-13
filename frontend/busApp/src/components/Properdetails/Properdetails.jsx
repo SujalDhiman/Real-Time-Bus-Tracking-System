@@ -21,7 +21,7 @@ function Map()
             setLongitude(payload.longitude)
         })
 
-    },[latitude,longitude])
+    },[])
 
 
 
@@ -61,7 +61,7 @@ export function Properdetails()
 {
 
     const {isLoaded}=useLoadScript({
-        googleMapsApiKey:"AIzaSyAnHMHMgI2JsOrNrmDO2VYNR6Dyw7qcpik"
+        googleMapsApiKey: 'AIzaSyAQ3BL9108_P__WzVDfJ7DnUg30WMLQu2A'
     })
 
     const socket =useContext(SocketContext)
@@ -80,7 +80,7 @@ export function Properdetails()
     useEffect(()=>{
         console.log(`busLocation-${id}`)
         socket.on(`busLocation-${id}`,(payload)=>{
-            console.log(payload)
+            //console.log(payload)
         })
         getActiveBusDetails()
     },[])

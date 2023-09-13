@@ -3,7 +3,7 @@ import { io } from 'socket.io-client';
 
 export const SocketContext = createContext();
 
-const socket = io('http://127.0.0.1:10000');
+const socket = io('http://localhost:443/');
 
 const SocketProvider = ({ children }) => {
   return (

@@ -29,7 +29,7 @@ export function Busdetails()
             busStatus:bs
         }
         try {
-            const response=await axios.post("http://127.0.0.1:10000/api/v1/details",obj)
+            const response=await axios.post("http://127.0.0.1:443/api/v1/details",obj)
 
             console.log(response)
             navigate(`/busgiveinformation/${response.data.createdBus._id}`)

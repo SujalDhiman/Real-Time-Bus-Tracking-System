@@ -1,6 +1,5 @@
-import { useState,useEffect, useContext } from "react"
+import {useState, useEffect, useContext, useDeferredValue} from "react"
 import {GoogleMap,MarkerF,useLoadScript} from "@react-google-maps/api"
-import { Properdetails } from "../Properdetails/Properdetails"
 import "./BusGiveInformation.css"
 import { SocketContext } from "../../Context/SocketContext"
 import { useParams } from "react-router-dom"
@@ -11,26 +10,42 @@ function Map()
 {
     const socket =useContext(SocketContext)
 
-    const [latitude,setLatitide]=useState(30.35315)
-    const [longitude,setLongitude]=useState(78.01751)
+    const [latitude,setLatitude]=useState(0);
+    const [longitude,setLongitude]=useState(0);
+    const differedLatitude = useDeferredValue(latitude);
+    const differedLongitude = useDeferredValue(longitude);
 
     const {id}=useParams()
 
     useEffect(()=>{
-        window.navigator.geolocation.watchPosition((position)=>{
-            setLatitide(position.coords.latitude)
-            setLongitude(position.coords.longitude)
-        })
 
-        socket.emit(`busId`,{latitude,longitude,id})
+        const options = {
+            enableHighAccuracy: true,
+            maximumAge: 0,
+        };
 
-    },[latitude,longitude])
+        const error = (err) => {
+            console.error(`ERROR(${err.code}): ${err.message}`);
+        }
+
+        navigator.geolocation.watchPosition((position)=>{
+            console.log(position.coords);
+            setLatitude(position.coords.latitude);
+            setLongitude(position.coords.longitude);
+        }, error, options);
+
+    },)
+
+    useEffect(() => {
+        socket.emit(`busId`,{latitude: differedLatitude, longitude: differedLongitude,id})
+        console.log(differedLatitude, differedLongitude);
+    }, [differedLatitude, differedLongitude])
 
     return (
         <>
-        <div><h1 className="text-white">latitude :{latitude}  longitude : {longitude} </h1></div>
-            <GoogleMap zoom={10} center={{lat:latitude,lng:longitude}} mapContainerClassName="map-container">
-                <MarkerF position={{lat:latitude,lng:longitude}} />
+        <div><h1 className="text-white">latitude :{differedLatitude}  longitude : {differedLongitude} </h1></div>
+            <GoogleMap zoom={10} center={{lat:differedLatitude,lng:differedLongitude}} mapContainerClassName="map-container">
+                <MarkerF position={{lat:differedLatitude,lng:differedLongitude}} />
             </GoogleMap>
         </>
     )
@@ -40,7 +55,7 @@ function Map()
 function BusGiveInformation()
 {
     const {isLoaded}=useLoadScript({
-        googleMapsApiKey:"AIzaSyAnHMHMgI2JsOrNrmDO2VYNR6Dyw7qcpik"
+        googleMapsApiKey:"AIzaSyAQ3BL9108_P__WzVDfJ7DnUg30WMLQu2A"
     })
 
     if(!isLoaded) return <h1 className="text-white">wait plz</h1>
