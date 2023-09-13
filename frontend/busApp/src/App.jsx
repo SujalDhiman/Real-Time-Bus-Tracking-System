@@ -1,5 +1,5 @@
-import { Header } from "./components/HEADER/Header";
-import { Outlet } from "react-router-dom";
+import { Header } from "./Header.jsx";
+import {Link, Outlet} from "react-router-dom";
 import SocketProvider from "./Context/SocketContext";
 
 
@@ -9,7 +9,7 @@ function App()
       <>
       <SocketProvider>
         <Header />
-        <Outlet />
+          <Outlet />
       </SocketProvider>
       </>
     )

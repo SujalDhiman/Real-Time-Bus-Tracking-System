@@ -7,7 +7,7 @@ function Card({busNumber,startingPoint,destinationPoint,active,objectId})
 {
     return (
         <div className="rounded-lg bg-slate-700 w-[400px] text-white">
-            <h1><Link to= {`/activeBus/${objectId}`}>Bus Number :- {busNumber}</Link></h1>
+            <h1><Link to= {`/user/trackVehicle/${objectId}`}>Bus Number :- {busNumber}</Link></h1>
             <h1>Current Location :{startingPoint.toUpperCase()}</h1>
             <h2>Target Location :{destinationPoint.toUpperCase()}</h2>
             <div className="flex space-x-10">Bus Status :- &nbsp;  {active === "active"?<h1 className="w-[20px] h-[20px] rounded-full bg-green-600"></h1>:<h1 className="w-[20px] h-[20px] rounded-full bg-red-600"></h1>}</div>
@@ -15,7 +15,7 @@ function Card({busNumber,startingPoint,destinationPoint,active,objectId})
     )
 }
 
-export function Gotdetails()
+export function LookupVehicles()
 {
     const [dataReceived,setDataReceived]=useState([])
     const [preserveData,setPreserveData]=useState([])
@@ -30,7 +30,7 @@ export function Gotdetails()
 
     async function getActiveBusDetails()
     {
-        const response=await axios.get(`http://127.0.0.1:10000/api/v1/activeBus`)
+        const response=await axios.get(`http://localhost:443/api/v1/activeBus`)
         console.log(response.data.buses)
         setDataReceived(response.data.buses)
         setPreserveData(response.data.buses)

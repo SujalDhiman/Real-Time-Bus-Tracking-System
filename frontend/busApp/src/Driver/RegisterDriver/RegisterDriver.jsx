@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "axios"
 import { useNavigate } from "react-router-dom";
 
-export function Busdetails()
+export function RegisterDriver()
 {
     let navigate=useNavigate()
     const [busNumber,setBusNumber]=useState("")
@@ -29,10 +29,10 @@ export function Busdetails()
             busStatus:bs
         }
         try {
-            const response=await axios.post("http://127.0.0.1:10000/api/v1/details",obj)
+            const response=await axios.post("http://127.0.0.1:443/api/v1/details",obj)
 
             console.log(response)
-            navigate(`/busgiveinformation/${response.data.createdBus._id}`)
+            navigate(`/driver/sendLocation/${response.data.createdBus._id}`)
 
         } catch (error) {
             console.log("An error occured")
