@@ -1,6 +1,6 @@
 import {useState, useEffect, useContext, useDeferredValue} from "react"
 import {GoogleMap,MarkerF,useLoadScript} from "@react-google-maps/api"
-import "./BusGiveInformation.css"
+import "./SendLocation.css"
 import { SocketContext } from "../../Context/SocketContext"
 import { useParams } from "react-router-dom"
 
@@ -55,7 +55,7 @@ function Map()
 }
 
 
-function BusGiveInformation()
+function SendLocation()
 {
     const {isLoaded}=useLoadScript({
         googleMapsApiKey:"AIzaSyAQ3BL9108_P__WzVDfJ7DnUg30WMLQu2A"
@@ -66,14 +66,14 @@ function BusGiveInformation()
     return (
     <>
         <div>
-            {/* <Properdetails/> */}
+            {/* <TrackVechicle/> */}
         </div>
         <Map className="mt-10"/>
     </>
     )
 }
 
-export default BusGiveInformation
+export default SendLocation
 
 
 

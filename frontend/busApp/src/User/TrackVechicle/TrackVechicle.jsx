@@ -3,21 +3,21 @@ import axios from "axios"
 import {Link,useParams} from "react-router-dom"
 import {GoogleMap,MarkerF,useLoadScript} from "@react-google-maps/api"
 import { SocketContext } from "../../Context/SocketContext"
-import "./Properdetails.css"
+import "./TrackVechicle.css"
 
 
 function Map()
 {
     const socket =useContext(SocketContext)
     const {id}=useParams()
-    const [latitude,setLatitide]=useState(0)
+    const [latitude,setLatitude]=useState(0)
     const [longitude,setLongitude]=useState(0)
 
-    useEffect(()=>{
+    useEffect(()=> {
 
         socket.on(`busLocation-${id}`,(payload)=>{
             console.log(payload)
-            setLatitide(payload.latitude)
+            setLatitude(payload.latitude)
             setLongitude(payload.longitude)
         })
 
@@ -57,7 +57,7 @@ function Card({busNumber,busNumberPlate,contactInfo,startingLocation,destination
     )
 }
 
-export function Properdetails()
+export function TrackVechicle()
 {
 
     const {isLoaded}=useLoadScript({
@@ -71,7 +71,7 @@ export function Properdetails()
     const [isLoading,setLoading]=useState(true)
     async function getActiveBusDetails()
     {
-        const response=await axios.get(`http://127.0.0.1:10000/api/v1/activeBus/${id}`)
+        const response=await axios.get(`http://localhost:443/api/v1/activeBus/${id}`)
         console.log(response.data.bus)
         // console.log(response.data.buses)
         setDataReceived(response.data.bus)
