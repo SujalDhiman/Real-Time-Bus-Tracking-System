@@ -1,27 +1,80 @@
-const busSchema=require("../model/busModel")
+const busSchema=require("../model/busModel.js")
 
-exports.busDetails=async function(req,res)
+exports.register=async function(req,res)
 {
-    const {busNumber,busNumberPlate,driver,startingPoint,destinationPoint,busStatus}=req.body
-
-    if(!(busNumber && busNumberPlate && driver && startingPoint && destinationPoint && busStatus))
-    res.status(400).send("All entries are compulsory")
-
-    const bus=await busSchema.findOne({busNumberPlate})
-    if(bus)
+    const {busNumber,busNumberPlate,driver}=req.body
+    try
     {
-        res.status(400).send("Bus Already Registered")
+        if(!(busNumber && busNumberPlate && driver ))
+        {
+            res.status(400).json({
+                allFields:false,
+                message:"All fields are not filled"
+            })
+        }
+        else
+        {
+            const bus=await busSchema.findOne({busNumberPlate})
+            if(bus)
+            {
+                res.status(400).send("Bus Already Registered")
+            }
+            else
+            {
+                let createdBus=await busSchema.create({...req.body})
+
+                createdBus.save({validateBeforeSave:false})
+                console.log(createdBus)
+                res.status(200).json({
+                    success:true,
+                    createdBus
+                })
+            }
+        }
     }
-    else
+    catch(error)
     {
-        let createdBus=await busSchema.create({...req.body})
-        console.log(createdBus)
-        res.status(200).json({
-            success:true,
-            createdBus
-        })
+        console.log(error.message)
+        //will see if response of error message has to be returned or not
+        res.status(400).send("Schema's requirement not fulfilled")
+    }  
+}
+
+exports.login=async function (req,res)
+{
+    //grabbing entered details from body
+    
+    const {busNumber,password}=req.body
+
+    try
+    {
+        //checking if busDriver with given busNumber exists or not
+
+        const bus=await busSchema.findOne({busNumber:busNumber})
+
+        console.log(bus)
+        //checking simulataneously if both busDriver exists and given password is correct
+        if(bus &&  await bus.validatePassword(password))
+        {
+            res.status(200).json({
+                login:true,
+                message:"Login Successful"
+            })
+        }
+        else
+        {
+            res.status(400).json({
+                login:false,
+                message:"Registration is required"
+            })
+        }
+    }
+    catch(error)
+    {
+        console.log(error.message)
     }
 }
+
 
 exports.activeBus=async function(req,res)
 {
