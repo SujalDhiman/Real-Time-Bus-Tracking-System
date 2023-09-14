@@ -3,7 +3,9 @@ import { io } from 'socket.io-client';
 
 export const SocketContext = createContext();
 
-const socket = io('http://localhost:443/');
+const socket = io('https://mutually-noble-turtle.ngrok-free.app', {extraHeaders: {
+    'ngrok-skip-browser-warning': 10,
+  }});
 
 const SocketProvider = ({ children }) => {
   return (

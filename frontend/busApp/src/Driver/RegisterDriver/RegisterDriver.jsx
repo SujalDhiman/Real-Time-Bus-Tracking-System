@@ -29,7 +29,7 @@ export function RegisterDriver()
             busStatus:bs
         }
         try {
-            const response=await axios.post("http://127.0.0.1:443/api/v1/details",obj)
+            const response=await axios.post("https://mutually-noble-turtle.ngrok-free.app/api/v1/details",obj)
 
             console.log(response)
             navigate(`/driver/sendLocation/${response.data.createdBus._id}`)

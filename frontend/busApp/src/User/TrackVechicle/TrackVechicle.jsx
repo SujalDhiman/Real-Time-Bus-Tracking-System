@@ -71,7 +71,12 @@ export function TrackVechicle()
     const [isLoading,setLoading]=useState(true)
     async function getActiveBusDetails()
     {
-        const response=await axios.get(`http://localhost:443/api/v1/activeBus/${id}`)
+        const response=await axios.get(`https://mutually-noble-turtle.ngrok-free.app/api/v1/activeBus/${id}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'ngrok-skip-browser-warning': 'true'
+            },
+        })
         console.log(response.data.bus)
         // console.log(response.data.buses)
         setDataReceived(response.data.bus)
