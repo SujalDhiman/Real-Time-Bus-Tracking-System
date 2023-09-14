@@ -1,5 +1,7 @@
-const SERVER_URL = 'https://mutually-noble-turtle.ngrok-free.app';
 
+const SERVER_URL = 'http://localhost:443';
+
+//Bypass ngrok browser warning will work with localhost as well
 const axiosConfig = {
     headers: {
         'Content-Type': 'application/json',
