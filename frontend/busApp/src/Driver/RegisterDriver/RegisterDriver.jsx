@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios"
 import { useNavigate } from "react-router-dom";
+import { request_url } from "../../constant/constants";
 
 export function RegisterDriver()
 {
@@ -29,7 +30,7 @@ export function RegisterDriver()
             busStatus:bs
         }
         try {
-            const response=await axios.post("http://127.0.0.1:443/api/v1/details",obj)
+            const response=await axios.post(request_url+"details",obj)
 
             console.log(response)
             navigate(`/driver/sendLocation/${response.data.createdBus._id}`)

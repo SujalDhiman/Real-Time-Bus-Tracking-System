@@ -1,7 +1,7 @@
 import { useState,useEffect } from "react"
 import axios from "axios"
 import {Link} from "react-router-dom"
-
+import { request_url } from "../../constant/constants"
 
 function Card({busNumber,startingPoint,destinationPoint,active,objectId})
 {
@@ -30,7 +30,7 @@ export function LookupVehicles()
 
     async function getActiveBusDetails()
     {
-        const response=await axios.get(`http://localhost:443/api/v1/activeBus`)
+        const response=await axios.get(request_url+"activeBus")
         console.log(response.data.buses)
         setDataReceived(response.data.buses)
         setPreserveData(response.data.buses)

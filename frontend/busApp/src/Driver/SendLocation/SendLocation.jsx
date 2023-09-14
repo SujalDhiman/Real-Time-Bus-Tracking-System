@@ -3,7 +3,7 @@ import {GoogleMap,MarkerF,useLoadScript} from "@react-google-maps/api"
 import "./SendLocation.css"
 import { SocketContext } from "../../Context/SocketContext"
 import { useParams } from "react-router-dom"
-
+import { request_url } from "../../constant/constants"
 
 
 function Map()
