@@ -1,6 +1,7 @@
 import { useState,useEffect } from "react"
 import axios from "axios"
 import {Link} from "react-router-dom"
+import {axiosConfig, SERVER_URL} from "../../Constants/config.js";
 
 
 function Card({busNumber,startingPoint,destinationPoint,active,objectId})
@@ -31,12 +32,7 @@ export function LookupVehicles()
     function getActiveBusDetails()
     {
 
-        axios.get('https://mutually-noble-turtle.ngrok-free.app/api/v1/activeBus', {
-            headers: {
-                'Content-Type': 'application/json',
-                'ngrok-skip-browser-warning': 'true'
-            },
-        })
+        axios.get(`${SERVER_URL}/api/v1/activeBus`, axiosConfig)
             .then(response => {
                 console.log(response.data);
                 setDataReceived(response.data.buses);

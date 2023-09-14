@@ -1,0 +1,3 @@
+const MAPS_KEY = 'AIzaSyAQ3BL9108_P__WzVDfJ7DnUg30WMLQu2A';
+
+export {MAPS_KEY};
