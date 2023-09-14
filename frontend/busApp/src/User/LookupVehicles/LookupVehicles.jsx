@@ -31,7 +31,6 @@ export function LookupVehicles()
 
     function getActiveBusDetails()
     {
-
         axios.get(`${SERVER_URL}/api/v1/activeBus`, axiosConfig)
             .then(response => {
                 console.log(response.data);
@@ -39,7 +38,6 @@ export function LookupVehicles()
                 setPreserveData(response.data.buses);
                 setLoading(false);
             })
-
     }
 
     useEffect(()=>{
