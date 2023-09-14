@@ -2,13 +2,13 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import './index.css'
-import {RouterProvider, createBrowserRouter, Outlet} from "react-router-dom"
+import { createHashRouter, RouterProvider} from "react-router-dom"
 import { RegisterDriver } from './Driver/RegisterDriver/RegisterDriver.jsx'
 import { LookupVehicles } from './User/LookupVehicles/LookupVehicles.jsx'
 import { TrackVechicle } from './User/TrackVechicle/TrackVechicle.jsx'
 import SendLocation from './Driver/SendLocation/SendLocation.jsx'
 import TypeOfUser from "./TypeOfUser.jsx";
-const router=createBrowserRouter([
+const router=createHashRouter([
   {
     path:"/",
     element:<App />,

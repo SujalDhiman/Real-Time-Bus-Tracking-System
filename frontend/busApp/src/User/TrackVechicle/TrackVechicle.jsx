@@ -4,7 +4,9 @@ import {Link,useParams} from "react-router-dom"
 import {GoogleMap,MarkerF,useLoadScript} from "@react-google-maps/api"
 import { SocketContext } from "../../Context/SocketContext"
 import "./TrackVechicle.css"
-import { request_url, socket_url } from "../../constant/constants"
+import {MAPS_KEY} from "../../Constants/keys.js";
+import {axiosConfig, SERVER_URL} from "../../Constants/config.js";
+
 
 function Map()
 {
@@ -61,7 +63,7 @@ export function TrackVechicle()
 {
 
     const {isLoaded}=useLoadScript({
-        googleMapsApiKey: 'AIzaSyAQ3BL9108_P__WzVDfJ7DnUg30WMLQu2A'
+        googleMapsApiKey: MAPS_KEY
     })
 
     const socket =useContext(SocketContext)
@@ -71,7 +73,7 @@ export function TrackVechicle()
     const [isLoading,setLoading]=useState(true)
     async function getActiveBusDetails()
     {
-        const response=await axios.get(request_url+`activeBus/${id}`)
+        const response=await axios.get(`${SERVER_URL}/api/v1/activeBus/${id}`, axiosConfig)
         console.log(response.data.bus)
         // console.log(response.data.buses)
         setDataReceived(response.data.bus)

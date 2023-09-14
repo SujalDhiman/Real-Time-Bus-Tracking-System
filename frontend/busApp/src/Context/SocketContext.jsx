@@ -1,10 +1,12 @@
 import React, { createContext, useContext } from 'react';
 import { io } from 'socket.io-client';
-import { socket_url } from '../constant/constants';
+import {SERVER_URL} from "../Constants/config.js";
 
 export const SocketContext = createContext();
 
-const socket = io(socket_url);
+const socket = io(SERVER_URL, {extraHeaders: {
+    'ngrok-skip-browser-warning': 10,
+  }});
 
 const SocketProvider = ({ children }) => {
   return (

@@ -9,11 +9,18 @@ const { Server } = require("socket.io");
 //connecting to database
 connectToDb()
 
+app.use((req, res, next) => {
+    console.log(req.method, req.ip);
+    next();
+})
+
 //setting up cross origin resource sharing
 app.use(cors({
     origin:"*",
     methods:["GET","POST","DELETE","PATCH"]
 }))
+
+app.get("/", (req, res) => {res.send("HELLO")});
 
 //setting up middlewares
 app.use(express.json())

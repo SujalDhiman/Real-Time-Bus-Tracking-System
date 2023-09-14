@@ -3,7 +3,8 @@ import {GoogleMap,MarkerF,useLoadScript} from "@react-google-maps/api"
 import "./SendLocation.css"
 import { SocketContext } from "../../Context/SocketContext"
 import { useParams } from "react-router-dom"
-import { request_url } from "../../constant/constants"
+import {MAPS_KEY} from "../../Constants/keys.js";
+
 
 
 function Map()
@@ -58,7 +59,7 @@ function Map()
 function SendLocation()
 {
     const {isLoaded}=useLoadScript({
-        googleMapsApiKey:"AIzaSyAQ3BL9108_P__WzVDfJ7DnUg30WMLQu2A"
+        googleMapsApiKey: MAPS_KEY
     })
 
     if(!isLoaded) return <h1 className="text-white">wait plz</h1>
