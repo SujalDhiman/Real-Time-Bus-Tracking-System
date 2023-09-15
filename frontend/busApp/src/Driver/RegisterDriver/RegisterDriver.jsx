@@ -12,8 +12,7 @@ export function RegisterDriver()
     const [name,setName]=useState("")
     const [contact,setContact]=useState("")
     const [age,setAge]=useState("")
-    const [sp,setSP]=useState("")
-    const [dp,setDP]=useState("")
+    const [route,setRoute]=useState("")
     const [bs,setBS]=useState("")
 
     async function submitDetails()
@@ -26,12 +25,11 @@ export function RegisterDriver()
                 contactInfo:contact,
                 age
             },
-            startingPoint:sp,
-            destinationPoint:dp,
+            route: route,
             busStatus:bs
         }
         try {
-            const response=await axios.post(`${SERVER_URL}/api/v1/details`,obj)
+            const response=await axios.post(`${SERVER_URL}/api/v1/register`,obj)
 
             console.log(response)
             navigate(`/driver/sendLocation/${response.data.createdBus._id}`)
@@ -57,9 +55,7 @@ export function RegisterDriver()
 
                     <input type="text" value={age}  onChange={(e)=>setAge(e.target.value)} placeholder="Enter Age "/>
 
-                    <input type="text" value={sp}  onChange={(e)=>setSP(e.target.value)} placeholder="Enter Current Location"/>
-
-                    <input type="text" value={dp}  onChange={(e)=>setDP(e.target.value)} placeholder="Enter Destination Location"/>
+                    <input type="text" value={route}  onChange={(e)=>setRoute(e.target.value)} placeholder="Enter Route"/>
 
                     <input type="text" value={bs}  onChange={(e)=>setBS(e.target.value)} placeholder="Enter Bus Status"/>
                     

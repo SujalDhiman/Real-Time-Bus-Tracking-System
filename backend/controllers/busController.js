@@ -1,4 +1,6 @@
 const busSchema=require("../model/busModel.js")
+const routeSchema = require("../model/routeModel.js")
+const stationSchema = require("../model/stationModel.js");
 
 exports.register=async function(req,res)
 {
@@ -78,8 +80,15 @@ exports.login=async function (req,res)
 
 exports.activeBus=async function(req,res)
 {
-    const allActiveBuses=await busSchema.find({busStatus:"active"})
-
+    const allActiveBuses=await busSchema.find({busStatus:"active"}).populate({
+        path: 'route',
+        select: 'routeName -_id',
+        populate: {
+            path: 'stations',
+            select: 'stationName position -_id'
+        }
+    });
+    console.log(allActiveBuses);
     if(allActiveBuses.length === 0)
         res.status(400).send("No Active Buses for now")
     else
@@ -125,9 +134,25 @@ exports.activeBusDetails=async function(req,res)
     const {id}=req.params
     
     //getting bus with the id
-    const bus=await busSchema.findById(id);
+    const bus=await busSchema.findById(id).populate({
+        path: 'route',
+        select: 'routeName -_id',
+        populate: {
+            path: 'stations',
+            select: 'stationName position -_id'
+        }
+    });
 
     res.status(200).json({
         bus
     })
+}
+
+exports.busRoutes = async function(req, res) {
+    const allRoutes = await routeSchema.find().populate("stations");
+
+    res.status(200).json({
+        success: true,
+        routes: allRoutes
+    });
 }

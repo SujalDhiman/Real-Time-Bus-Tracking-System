@@ -1,5 +1,6 @@
 const mongoose=require("mongoose")
 const bcrypt=require("bcrypt")
+const {Router} = require("express");
 
 
 const busSchema=new mongoose.Schema({
@@ -24,11 +25,9 @@ const busSchema=new mongoose.Schema({
             minlength:[6,"Password Should Contain Atleast 6 Characters"]
         }
     },
-    startingPoint:{
-        type:String
-    },
-    destinationPoint:{
-        type:String
+    route: {
+        ref: "Route",
+        type: mongoose.Schema.Types.ObjectId
     },
     busStatus:{
         type:String,

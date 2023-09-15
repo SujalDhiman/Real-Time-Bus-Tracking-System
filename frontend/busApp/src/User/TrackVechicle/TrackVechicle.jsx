@@ -93,7 +93,7 @@ export function TrackVechicle()
     return (
         <>
         <div className="space-y-16">
-        {isLoading?<h1> Ruko Bhaiyo </h1>:<Card busNumber={dataReceived.busNumber} busNumberPlate={dataReceived.busNumberPlate} contactInfo={dataReceived.driver.contactInfo} startingLocation={dataReceived.startingPoint} destinationLocation={dataReceived.destinationPoint} age={dataReceived.driver.age} name={dataReceived.driver.name} busStatus={dataReceived.busStatus} key={dataReceived._id} objectId={dataReceived._id}/>}
+        {isLoading?<h1> Ruko Bhaiyo </h1>:<Card busNumber={dataReceived.busNumber} busNumberPlate={dataReceived.busNumberPlate} contactInfo={dataReceived.driver.contactInfo} startingLocation={"sp"} destinationLocation={"dp"} age={dataReceived.driver.age} name={dataReceived.driver.name} busStatus={dataReceived.busStatus} key={dataReceived._id} objectId={dataReceived._id}/>}
         </div>
         <Map />
         </>
