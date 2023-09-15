@@ -58,12 +58,13 @@ exports.login=async function (req,res)
         {
             res.status(200).json({
                 login:true,
-                message:"Login Successful"
+                message:"Login Successful",
+                bus
             })
         }
         else
         {
-            res.status(400).json({
+            res.status(200).json({
                 login:false,
                 message:"Registration is required"
             })
