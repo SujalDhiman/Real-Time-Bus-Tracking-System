@@ -1,5 +1,5 @@
 
-const SERVER_URL = 'http://localhost:443';
+const SERVER_URL = 'http://localhost:10000';
 
 //Bypass ngrok browser warning will work with localhost as well
 const axiosConfig = {
