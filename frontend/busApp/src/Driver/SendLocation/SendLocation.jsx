@@ -9,7 +9,7 @@ import {MAPS_KEY} from "../../Constants/keys.js";
 
 function Map()
 {
-    const socket =useContext(SocketContext)
+    const {socket} =useContext(SocketContext)
 
     const [latitude,setLatitude]=useState(0);
     const [longitude,setLongitude]=useState(0);
@@ -37,7 +37,8 @@ function Map()
             setLongitude(position.coords.longitude);
         }, error, options);
 
-    },)
+
+    },[latitude,longitude])
 
     useEffect(() => {
         //Only emitting when there is a change in position
