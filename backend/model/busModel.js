@@ -32,7 +32,7 @@ const busSchema=new mongoose.Schema({
     },
     busStatus:{
         type:String,
-        enum:["active","disabled"]
+        enum:["active","notactive"]
     }
 },{timestamps:true})
 
