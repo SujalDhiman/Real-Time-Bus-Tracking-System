@@ -27,7 +27,7 @@ function BusStatus()
             console.log(routes);
             setBusRoutes(routes.data.routes);
         })();
-    });
+    },[]);
 
     async function submitDetails (){
 
@@ -40,12 +40,7 @@ function BusStatus()
             }
             console.log(payload)
             console.log(`${SERVER_URL}/api/v1/bus/${id}`)
-            const response=await axios.put(`${SERVER_URL}/api/v1/bus/${id}`,payload, {
-                headers: {
-                    "Content-Type": "application/json",
-                    "Accept": "application/json"
-                }
-            })
+            const response=await axios.post(`${SERVER_URL}/api/v1/bus/${id}`,payload, axiosConfig)
             console.log(response)
             navigate("/driver/dashboard")
         }

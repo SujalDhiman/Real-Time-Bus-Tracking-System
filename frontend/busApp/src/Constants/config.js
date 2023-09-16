@@ -1,5 +1,5 @@
 
-const SERVER_URL = 'http://localhost:10000';
+const SERVER_URL = 'https://mutually-noble-turtle.ngrok-free.app';
 
 //Bypass ngrok browser warning will work with localhost as well
 const axiosConfig = {

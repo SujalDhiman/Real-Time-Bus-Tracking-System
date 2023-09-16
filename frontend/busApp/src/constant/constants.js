@@ -1,3 +1,3 @@
-export const socket_url="http://localhost:10000/";
+export const socket_url="https://mutually-noble-turtle.ngrok-free.app/";
 
-export const request_url="http://localhost:10000/api/v1/"
+export const request_url="https://mutually-noble-turtle.ngrok-free.app/api/v1/"

@@ -11,7 +11,7 @@ router.route("/activeBus").get(activeBus)
 router.route("/activeBus/:id").get(activeBusDetails)
 
 //Not working with patch or put
-router.route("/bus/:id").put(updateBusDetails)
+router.route("/bus/:id").post(updateBusDetails)
 router.route("/busRoutes").get(busRoutes);
 
 
