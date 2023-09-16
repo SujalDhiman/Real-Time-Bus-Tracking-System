@@ -120,7 +120,7 @@ exports.updateBusDetails=async function(req,res){
     {
         console.log(req.body);
         //give data to update with
-        const updatedBusDetails=await busSchema.findByIdAndUpdate(id,{...req.body},{
+        const updatedBusDetails=await busSchema.findByIdAndUpdate(id,{$set: {...req.body}},{
             new:true
         })
 

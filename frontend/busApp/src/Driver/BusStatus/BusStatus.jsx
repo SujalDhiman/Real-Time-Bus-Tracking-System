@@ -1,6 +1,5 @@
-import { useCallback,useState } from "react"
+import {useCallback, useEffect, useState} from "react"
 import { useNavigate, useParams } from "react-router-dom"
-import { request_url } from "../../constant/constants"
 import axios from "axios"
 import {axiosConfig, SERVER_URL} from "../../Constants/config"
 
@@ -12,8 +11,7 @@ function BusStatus()
     const [name,setName]=useState("")
     const [status,setStatus]=useState("")
     const [route, setRoute]=useState("")
-    const [startingPoint,setStartingPoint]=useState("")
-    const [destinationPoint,setDestinationPoint]=useState("")
+    const [busRoutes, setBusRoutes]=useState([]);
 
     const changeStatus=useCallback(function (e)
     {
@@ -23,20 +21,26 @@ function BusStatus()
             setStatus("notactive")
     },[status])
 
+    useEffect(() => {
+        (async () => {
+            const routes = await axios.get(`${SERVER_URL}/api/v1/busRoutes`, axiosConfig);
+            console.log(routes);
+            setBusRoutes(routes.data.routes);
+        })();
+    });
+
     async function submitDetails (){
 
         if(name !== "" && status !== "" && route !== "")
         {
             let payload={
-                driver:{
-                    name
-                },
-                 route: route,
+                "driver.name": name,
+                route: route,
                 busStatus:status
             }
             console.log(payload)
             console.log(`${SERVER_URL}/api/v1/bus/${id}`)
-            const response=await axios.post(`${SERVER_URL}/api/v1/bus/${id}`,payload, {
+            const response=await axios.put(`${SERVER_URL}/api/v1/bus/${id}`,payload, {
                 headers: {
                     "Content-Type": "application/json",
                     "Accept": "application/json"
@@ -64,8 +68,22 @@ function BusStatus()
                         <button id="a" onClick={changeStatus}  className="px-2 py-2 bg-blue-600 text-white">Active</button>
                         <button id="na" onClick={changeStatus} className="px-2 py-2 bg-blue-600 text-white">Not Active</button>
                     </div>
-                    
-                    <input type="route" value={route}  onChange={(e)=>setRoute(e.target.value)} placeholder="Enter Route"/>
+
+                    <select value={route} onChange={(e) => setRoute(e.target.value)}>
+                        <option>Select Route</option>
+                        {
+                            (() => {
+                                if(busRoutes) {
+                                    return busRoutes.map((route) => {
+                                        return (<option value={route._id}>{route.routeName}</option>);
+                                    })
+                                } else {
+                                    return <option>loading</option>
+                                }
+                            })()
+                        }
+                    </select>
+
 
                     {/*<input type="text" value={destinationPoint}  onChange={(e)=>setDestinationPoint(e.target.value)} placeholder="Enter Destination Point"/>*/}
 

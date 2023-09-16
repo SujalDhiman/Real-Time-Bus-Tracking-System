@@ -12,7 +12,6 @@ function RegisterDriver()
     const [name,setName]=useState("")
     const [contact,setContact]=useState("")
     const [password,setPassword]=useState("")
-
     const [toggle,setToggle]=useState("password")
 
 

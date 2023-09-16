@@ -10,7 +10,8 @@ router.route("/login").post(login)
 router.route("/activeBus").get(activeBus)
 router.route("/activeBus/:id").get(activeBusDetails)
 
-router.route("/bus/:id").post(updateBusDetails)
+//Not working with patch or put
+router.route("/bus/:id").put(updateBusDetails)
 router.route("/busRoutes").get(busRoutes);
 
 
