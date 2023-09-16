@@ -1,10 +1,9 @@
 import {useState, useEffect, useContext, useDeferredValue} from "react"
+import React from 'react';
 import {
     DirectionsRenderer,
-    DirectionsService,
     GoogleMap,
     MarkerF,
-    Polyline,
     TrafficLayer,
     useLoadScript
 } from "@react-google-maps/api"
@@ -15,14 +14,20 @@ import {MAPS_KEY} from "../../Constants/keys.js";
 import axios from "axios";
 import {axiosConfig, SERVER_URL} from "../../Constants/config.js";
 
+const MemoizedDirectionsRenderer = React.memo(({ directions }) => (
+    <DirectionsRenderer options={{ directions: directions }} />
+));
 
 
 function Map()
 {
     const {socket} =useContext(SocketContext)
 
+
+
     const [latitude,setLatitude]=useState(0);
     const [longitude,setLongitude]=useState(0);
+    const [busRoute, setBusRoute]=useState();
 
     //To prevent react batch rendering problems
     const differedLatitude = useDeferredValue(latitude);
@@ -54,31 +59,39 @@ function Map()
     },[latitude,longitude])
 
     useEffect(() => {
-        (async () => {
-            const route = await axios.get(`${SERVER_URL}/api/v1/activeBus/${id}`, axiosConfig);
-            const waypoints = [];
-            route.data.bus.route.stations.map((station) => {
-              waypoints.push({"location": `${station.position[0]} ${station.position[1]}`, "stopover": true});
-            });
-
-            console.log(waypoints);
-
-            const directionsOptions = {
-                destination: waypoints[waypoints.length-1].location ,
-                origin: waypoints[0].location,
-                waypoints: waypoints,
-                travelMode: 'DRIVING',
-            };
-
-            directionsService.route(directionsOptions, (response, status) => {
-                if (status === 'OK') {
-                    setDirectionsResponse(response);
-                } else {
-                    console.log('Directions request failed: ', status);
-                }
-            });
-        })();
+        axios.get(`${SERVER_URL}/api/v1/activeBus/${id}`, axiosConfig).then(
+            (route) => {
+                setBusRoute(route);
+            }
+        )
+        console.log("here");
     }, [])
+
+    useEffect(() => {
+        if(!busRoute)
+            return;
+
+        const waypoints = [];
+        busRoute.data.bus.route.stations.map((station) => {
+            waypoints.push({"location": `${station.position[0]} ${station.position[1]}`, "stopover": true});
+        });
+        console.log(waypoints);
+
+        const directionsOptions = {
+            destination: waypoints[waypoints.length-1].location ,
+            origin: waypoints[0].location,
+            waypoints: waypoints,
+            travelMode: 'DRIVING',
+        };
+
+        directionsService.route(directionsOptions, (response, status) => {
+            if (status === 'OK') {
+                setDirectionsResponse(response);
+            } else {
+                console.log('Directions request failed: ', status);
+            }
+        });
+    },[busRoute])
 
     useEffect(() => {
         //Only emitting when there is a change in position
@@ -94,7 +107,7 @@ function Map()
             <GoogleMap zoom={10} center={{lat:differedLatitude,lng:differedLongitude}} mapContainerClassName="map-container">
                 {directionsResponse && <>
                     <TrafficLayer/>
-                    <DirectionsRenderer options={{ directions: directionsResponse }}/>
+                    <MemoizedDirectionsRenderer directions={directionsResponse}/>
                 </>}
                 <MarkerF position={{lat:differedLatitude,lng:differedLongitude}} />
             </GoogleMap>

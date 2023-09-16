@@ -1,4 +1,4 @@
-import { useState,useEffect,useContext } from "react"
+import React, { useState,useEffect,useContext } from "react"
 import axios from "axios"
 import {Link,useParams} from "react-router-dom"
 import {DirectionsRenderer, GoogleMap, MarkerF, TrafficLayer, useLoadScript} from "@react-google-maps/api"
@@ -6,6 +6,11 @@ import { SocketContext } from "../../Context/SocketContext"
 import "./TrackVechicle.css"
 import {MAPS_KEY} from "../../Constants/keys.js";
 import {axiosConfig, SERVER_URL} from "../../Constants/config.js";
+
+
+const MemoizedDirectionsRenderer = React.memo(({ directions }) => (
+    <DirectionsRenderer options={{ directions: directions }} />
+));
 
 
 function Map()
@@ -34,7 +39,6 @@ function Map()
                 waypoints.push({"location": `${station.position[0]} ${station.position[1]}`, "stopover": true});
             });
 
-            console.log(waypoints);
 
             const directionsOptions = {
                 destination: waypoints[waypoints.length-1].location ,
@@ -62,7 +66,7 @@ function Map()
             <GoogleMap zoom={10} center={{lat:latitude,lng:longitude}} mapContainerClassName="map-container">
                 {directionsResponse && <>
                     <TrafficLayer/>
-                    <DirectionsRenderer options={{ directions: directionsResponse }}/>
+                    <MemoizedDirectionsRenderer directions={directionsResponse }/>
                 </>}
                 <MarkerF position={{lat:latitude,lng:longitude}} />
             </GoogleMap>
