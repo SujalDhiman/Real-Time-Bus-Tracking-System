@@ -1,7 +1,7 @@
 import { useState,useEffect,useContext } from "react"
 import axios from "axios"
 import {Link,useParams} from "react-router-dom"
-import {GoogleMap,MarkerF,useLoadScript} from "@react-google-maps/api"
+import {DirectionsRenderer, GoogleMap, MarkerF, TrafficLayer, useLoadScript} from "@react-google-maps/api"
 import { SocketContext } from "../../Context/SocketContext"
 import "./TrackVechicle.css"
 import {MAPS_KEY} from "../../Constants/keys.js";
@@ -15,16 +15,44 @@ function Map()
     const [latitude,setLatitude]=useState(0)
     const [longitude,setLongitude]=useState(0)
 
-    useEffect(()=> {
+    const [directionsResponse, setDirectionsResponse] = useState(null);
+    const directionsService = new google.maps.DirectionsService();
 
+    useEffect(() => {
         socket.on(`busLocation-${id}`,(payload)=>{
             console.log(payload)
             setLatitude(payload.latitude)
-            setLongitude(payload.longitude)
-        })
+            setLongitude(payload.longitude)}
+        )
+    }, [])
+
+    useEffect(()=> {
+        (async () => {
+            const route = await axios.get(`${SERVER_URL}/api/v1/activeBus/${id}`, axiosConfig);
+            const waypoints = [];
+            route.data.bus.route.stations.map((station) => {
+                waypoints.push({"location": `${station.position[0]} ${station.position[1]}`, "stopover": true});
+            });
+
+            console.log(waypoints);
+
+            const directionsOptions = {
+                destination: waypoints[waypoints.length-1].location ,
+                origin: waypoints[0].location,
+                waypoints: waypoints,
+                travelMode: 'DRIVING',
+            };
+
+            directionsService.route(directionsOptions, (response, status) => {
+                if (status === 'OK') {
+                    setDirectionsResponse(response);
+                } else {
+                    console.log('Directions request failed: ', status);
+                }
+            });
+        })();
 
     },[])
-
 
 
 
@@ -32,6 +60,10 @@ function Map()
         <>
         <div><h1 className="text-white">latitude :{latitude}  longitude : {longitude} </h1></div>
             <GoogleMap zoom={10} center={{lat:latitude,lng:longitude}} mapContainerClassName="map-container">
+                {directionsResponse && <>
+                    <TrafficLayer/>
+                    <DirectionsRenderer options={{ directions: directionsResponse }}/>
+                </>}
                 <MarkerF position={{lat:latitude,lng:longitude}} />
             </GoogleMap>
         </>
