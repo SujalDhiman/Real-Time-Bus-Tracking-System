@@ -17,7 +17,7 @@ app.use((req, res, next) => {
 //setting up cross origin resource sharing
 app.use(cors({
     origin:"*",
-    methods:["GET","POST","DELETE","PATCH"]
+    methods:["GET","POST","DELETE","PATCH"],
 }))
 
 app.get("/", (req, res) => {res.send("HELLO")});
@@ -29,7 +29,7 @@ app.use(express.urlencoded({extended:true}))
 
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
-    cors:"*"
+    cors:"*",
 });
 
 io.on("connection", (socket) => {

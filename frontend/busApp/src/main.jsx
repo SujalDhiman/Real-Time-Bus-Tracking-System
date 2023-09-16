@@ -11,6 +11,7 @@ import TypeOfUser from "./TypeOfUser.jsx";
 import LoginDriver from './loginDriver/LoginDriver.jsx'
 import RegisterDriver from './registerDriver/RegisterDriver.jsx'
 import BusDashboard from './busDashboard/BusDashboard.jsx'
+import BusStatus from './BusStatus/BusStatus.jsx'
 const router=createHashRouter([
   {
     path:"/",
@@ -31,6 +32,10 @@ const router=createHashRouter([
       {
         path:"/driver/dashboard",
         element:<BusDashboard/>
+      },
+      {
+        path:"/driver/setStatus/:id",
+        element:<BusStatus/>
       },
       {
         path:"/driver/sendLocation/:id",

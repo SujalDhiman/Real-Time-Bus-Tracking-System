@@ -38,6 +38,7 @@ function LoginDriver()
             if(response.data.login === true)
             {
                 // navigate("/driver/login")
+                localStorage.setItem("id",response.data.bus._id)
                 setBusId(response.data.bus._id)
                 console.log("hello")
                 navigate("/driver/dashboard")
