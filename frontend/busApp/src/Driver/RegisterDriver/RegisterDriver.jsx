@@ -1,67 +1,86 @@
-import { useState } from "react";
+import {useState,useEffect,useCallback} from "react"
+import {useNavigate} from "react-router-dom"
 import axios from "axios"
-import { useNavigate } from "react-router-dom";
-import {SERVER_URL} from "../../Constants/config.js";
+import { SERVER_URL } from "../../Constants/config"
+import {Link} from "react-router-dom"
 
-
-export function RegisterDriver()
+function RegisterDriver()
 {
     let navigate=useNavigate()
     const [busNumber,setBusNumber]=useState("")
     const [busNumberPlate,setBusNumberPlate]=useState("")
     const [name,setName]=useState("")
     const [contact,setContact]=useState("")
-    const [age,setAge]=useState("")
-    const [route,setRoute]=useState("")
-    const [bs,setBS]=useState("")
+    const [password,setPassword]=useState("")
+
+    const [toggle,setToggle]=useState("password")
+
+
+    const viewPassword=useCallback(function ()
+    {
+        if(toggle === "password")
+            setToggle("text")
+        else 
+            setToggle("password")
+    },[toggle])
+
 
     async function submitDetails()
     {
-        let obj={
-            busNumber,
-            busNumberPlate,
-            driver:{
-                name,
-                contactInfo:contact,
-                age
-            },
-            route: route,
-            busStatus:bs
-        }
-        try {
-            const response=await axios.post(`${SERVER_URL}/api/v1/register`,obj)
+        if(busNumber !== "" && busNumberPlate !== "" && name !== "" && contact !== "" && password !== "")
+        {   
+            let payload={
+                busNumber,
+                busNumberPlate,
+                driver:{
+                    name,
+                    contactInfo:contact,
+                    password
+                }
+            }
+
+            const response=await axios.post(`${SERVER_URL}/api/v1/register`,payload)
 
             console.log(response)
-            navigate(`/driver/sendLocation/${response.data.createdBus._id}`)
 
-        } catch (error) {
-            console.log("An error occured")
+            if(response.data.success === true)
+            {
+                navigate("/driver/login")
+            }
+        }
+        else
+        {
+            alert("Missing Fields Information")
         }
     }
 
-
     return (
-        <>
-            <div className="mt-10 flex flex-col justify-center items-center">
-                <h1 className="text-white text-3xl font-bold text-center">Bus Details</h1>
-                <div className="rounded-lg bg-gray-700 w-[500px] flex flex-col justify-center items-center space-y-14">
-                    <input type="text" value={busNumber} onChange={(e)=>setBusNumber(e.target.value)} placeholder="Enter Bus Number"/>
+    <>
+        <div className="mt-10 flex flex-col justify-center items-center">
+            <h1 className="text-white text-3xl font-bold text-center">Bus Details</h1>
+            <div className="rounded-lg bg-gray-700 w-[500px] flex flex-col justify-center items-center space-y-14">
+                <input type="text" value={busNumber} onChange={(e)=>setBusNumber(e.target.value)} placeholder="Enter Bus Number"/>
 
-                    <input type="text" value={busNumberPlate}  onChange={(e)=>setBusNumberPlate(e.target.value)} placeholder="Enter Bus Number Plate"/>
+                <input type="text" value={busNumberPlate}  onChange={(e)=>setBusNumberPlate(e.target.value)} placeholder="Enter Bus Number Plate"/>
 
-                    <input type="text" value={name}  onChange={(e)=>setName(e.target.value)} placeholder="Enter Name"/>
+                <input type="text" value={name}  onChange={(e)=>setName(e.target.value)} placeholder="Enter Name"/>
 
-                    <input type="text" value={contact}  onChange={(e)=>setContact(e.target.value)} placeholder="Enter Contact Number"/>
-
-                    <input type="text" value={age}  onChange={(e)=>setAge(e.target.value)} placeholder="Enter Age "/>
-
-                    <input type="text" value={route}  onChange={(e)=>setRoute(e.target.value)} placeholder="Enter Route"/>
-
-                    <input type="text" value={bs}  onChange={(e)=>setBS(e.target.value)} placeholder="Enter Bus Status"/>
-
-                    <button className="px-4 py-2 rounded-lg text-white bg-blue-600" onClick={submitDetails}>Register</button>
+                <input type="text" value={contact}  onChange={(e)=>setContact(e.target.value)} placeholder="Enter Contact Number"/>
+                
+                <div className="flex">
+                    <input type={toggle} value={password} onChange={(e)=>setPassword(e.target.value)} placeholder="Enter Your Password" className="outline-none"/>
+                    <button onClick={viewPassword} className="px-4 py-1 bg-blue-700 text-white">{toggle === "password"? "Show":"Hide"}</button>
                 </div>
+                    
+                <button className="px-4 py-2 rounded-lg text-white bg-blue-600" onClick={submitDetails}>Register</button>
+
+
+                <h1 className="text-white">Already signed in <Link to={"/driver/login"}>Login</Link></h1>
             </div>
-        </>
+        </div>
+    </>
     )
 }
+
+
+export default RegisterDriver;

@@ -1,5 +1,5 @@
 import {useState,useEffect,useContext} from "react"
-import { SocketContext } from "../Context/SocketContext";
+import { SocketContext } from "../../Context/SocketContext";
 import { Link } from "react-router-dom";
 
 function BusDashboard()

@@ -1,9 +1,9 @@
 import {useState,useEffect,useCallback,useContext} from "react"
 import axios from "axios"
-import { request_url } from "../constant/constants";
 import { useNavigate } from "react-router-dom";
-import { SocketContext } from "../Context/SocketContext";
+import { SocketContext } from "../../Context/SocketContext";
 import { Link } from "react-router-dom";
+import {SERVER_URL} from "../../Constants/config.js";
 
 function LoginDriver()
 {
@@ -31,7 +31,7 @@ function LoginDriver()
                 password
             }
 
-            const response=await axios.post(request_url + "login",payload)
+            const response=await axios.post(`${SERVER_URL}/api/v1/login`,payload)
 
             console.log(response)
 

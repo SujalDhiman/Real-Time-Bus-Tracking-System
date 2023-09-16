@@ -8,9 +8,9 @@ import { LookupVehicles } from './User/LookupVehicles/LookupVehicles.jsx'
 import { TrackVechicle } from './User/TrackVechicle/TrackVechicle.jsx'
 import SendLocation from './Driver/SendLocation/SendLocation.jsx'
 import TypeOfUser from "./TypeOfUser.jsx";
-import LoginDriver from './loginDriver/LoginDriver.jsx'
-import RegisterDriver from './registerDriver/RegisterDriver.jsx'
-import BusDashboard from './busDashboard/BusDashboard.jsx'
+import LoginDriver from './Driver/LoginDriver/LoginDriver.jsx'
+import RegisterDriver from './Driver/RegisterDriver/RegisterDriver.jsx'
+import BusDashboard from './Driver/BusDashboard/BusDashboard.jsx'
 const router=createHashRouter([
   {
     path:"/",
@@ -21,7 +21,7 @@ const router=createHashRouter([
         element:<TypeOfUser/>
       },
       {
-        path:"/driver/registerDriver",
+        path:"/driver/RegisterDriver",
         element:<RegisterDriver />
       },
       {
