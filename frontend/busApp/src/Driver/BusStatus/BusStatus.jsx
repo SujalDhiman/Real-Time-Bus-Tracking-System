@@ -1,8 +1,8 @@
 import { useCallback,useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
-import { request_url } from "../constant/constants"
+import { request_url } from "../../constant/constants"
 import axios from "axios"
-import { axiosConfig } from "../Constants/config"
+import { axiosConfig } from "../../Constants/config"
 
 function BusStatus()
 {
