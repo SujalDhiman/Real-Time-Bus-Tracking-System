@@ -3,11 +3,15 @@ import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import './index.css'
 import { createHashRouter, RouterProvider} from "react-router-dom"
-import { RegisterDriver } from './Driver/RegisterDriver/RegisterDriver.jsx'
+
 import { LookupVehicles } from './User/LookupVehicles/LookupVehicles.jsx'
 import { TrackVechicle } from './User/TrackVechicle/TrackVechicle.jsx'
 import SendLocation from './Driver/SendLocation/SendLocation.jsx'
 import TypeOfUser from "./TypeOfUser.jsx";
+import LoginDriver from './Driver/LoginDriver/LoginDriver.jsx'
+import RegisterDriver from './Driver/registerDriver/RegisterDriver.jsx'
+import BusDashboard from './Driver/busDashboard/BusDashboard.jsx'
+import BusStatus from './Driver/BusStatus/BusStatus.jsx'
 const router=createHashRouter([
   {
     path:"/",
@@ -20,6 +24,18 @@ const router=createHashRouter([
       {
         path:"/driver/registerDriver",
         element:<RegisterDriver />
+      },
+      {
+        path:"/driver/login",
+        element:<LoginDriver/>
+      },
+      {
+        path:"/driver/dashboard",
+        element:<BusDashboard/>
+      },
+      {
+        path:"/driver/setStatus/:id",
+        element:<BusStatus/>
       },
       {
         path:"/driver/sendLocation/:id",

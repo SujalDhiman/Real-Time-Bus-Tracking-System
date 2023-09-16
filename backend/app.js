@@ -6,8 +6,16 @@ const busRouter=require("./router/busRoute")
 const { createServer } = require("http");
 const { Server } = require("socket.io");
 
+app.use(cors({
+    origin:"*",
+    methods:["GET","POST","DELETE","PATCH"],
+}))
+
+app.options('*', cors());
+
 //connecting to database
 connectToDb()
+
 
 app.use((req, res, next) => {
     console.log(req.method, req.ip);
@@ -15,10 +23,6 @@ app.use((req, res, next) => {
 })
 
 //setting up cross origin resource sharing
-app.use(cors({
-    origin:"*",
-    methods:["GET","POST","DELETE","PATCH"]
-}))
 
 app.get("/", (req, res) => {res.send("HELLO")});
 
@@ -29,7 +33,7 @@ app.use(express.urlencoded({extended:true}))
 
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
-    cors:"*"
+    cors:"*",
 });
 
 io.on("connection", (socket) => {

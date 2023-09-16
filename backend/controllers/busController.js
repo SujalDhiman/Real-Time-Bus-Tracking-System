@@ -1,32 +1,94 @@
-const busSchema=require("../model/busModel")
+const busSchema=require("../model/busModel.js")
+const routeSchema = require("../model/routeModel.js")
+const stationSchema = require("../model/stationModel.js");
 
-exports.busDetails=async function(req,res)
+exports.register=async function(req,res)
 {
-    const {busNumber,busNumberPlate,driver,startingPoint,destinationPoint,busStatus}=req.body
-
-    if(!(busNumber && busNumberPlate && driver && startingPoint && destinationPoint && busStatus))
-    res.status(400).send("All entries are compulsory")
-
-    const bus=await busSchema.findOne({busNumberPlate})
-    if(bus)
+    const {busNumber,busNumberPlate,driver}=req.body
+    try
     {
-        res.status(400).send("Bus Already Registered")
+        if(!(busNumber && busNumberPlate && driver ))
+        {
+            res.status(400).json({
+                allFields:false,
+                message:"All fields are not filled"
+            })
+        }
+        else
+        {
+            const bus=await busSchema.findOne({busNumberPlate})
+            if(bus)
+            {
+                res.status(400).send("Bus Already Registered")
+            }
+            else
+            {
+                let createdBus=await busSchema.create({...req.body})
+
+                createdBus.save({validateBeforeSave:false})
+                console.log(createdBus)
+                res.status(200).json({
+                    success:true,
+                    createdBus
+                })
+            }
+        }
     }
-    else
+    catch(error)
     {
-        let createdBus=await busSchema.create({...req.body})
-        console.log(createdBus)
-        res.status(200).json({
-            success:true,
-            createdBus
-        })
+        console.log(error.message)
+        //will see if response of error message has to be returned or not
+        res.status(400).send("Schema's requirement not fulfilled")
+    }  
+}
+
+exports.login=async function (req,res)
+{
+    //grabbing entered details from body
+    
+    const {busNumber,password}=req.body
+
+    try
+    {
+        //checking if busDriver with given busNumber exists or not
+
+        const bus=await busSchema.findOne({busNumber:busNumber})
+
+        console.log(bus)
+        //checking simulataneously if both busDriver exists and given password is correct
+        if(bus &&  await bus.validatePassword(password))
+        {
+            res.status(200).json({
+                login:true,
+                message:"Login Successful",
+                bus
+            })
+        }
+        else
+        {
+            res.status(200).json({
+                login:false,
+                message:"Registration is required"
+            })
+        }
+    }
+    catch(error)
+    {
+        console.log(error.message)
     }
 }
 
+
 exports.activeBus=async function(req,res)
 {
-    const allActiveBuses=await busSchema.find({busStatus:"active"})
-
+    const allActiveBuses=await busSchema.find({busStatus:"active"}).populate({
+        path: 'route',
+        populate: {
+            path: 'stations',
+            select: 'stationName position -_id'
+        }
+    });
+    console.log(allActiveBuses);
     if(allActiveBuses.length === 0)
         res.status(400).send("No Active Buses for now")
     else
@@ -55,10 +117,13 @@ exports.updateBusDetails=async function(req,res){
     }
     else
     {
+        console.log(req.body);
         //give data to update with
-        const updatedBusDetails=await busSchema.findByIdAndUpdate(id,{...req.body})
+        const updatedBusDetails=await busSchema.findByIdAndUpdate(id,{$set: {...req.body}},{
+            new:true
+        })
 
-        console.log(updatedBusDetails)
+       // console.log(updatedBusDetails)
 
         res.status(200).json({
             update:"successful",
@@ -72,9 +137,25 @@ exports.activeBusDetails=async function(req,res)
     const {id}=req.params
     
     //getting bus with the id
-    const bus=await busSchema.findById(id);
+    const bus=await busSchema.findById(id).populate({
+        path: 'route',
+        select: 'routeName -_id',
+        populate: {
+            path: 'stations',
+            select: 'stationName position -_id'
+        }
+    });
 
     res.status(200).json({
         bus
     })
+}
+
+exports.busRoutes = async function(req, res) {
+    const allRoutes = await routeSchema.find().populate("stations");
+
+    res.status(200).json({
+        success: true,
+        routes: allRoutes
+    });
 }

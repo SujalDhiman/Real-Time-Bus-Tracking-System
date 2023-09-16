@@ -1,4 +1,4 @@
-import React, { createContext, useContext } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import { io } from 'socket.io-client';
 import {SERVER_URL} from "../Constants/config.js";
 
@@ -9,8 +9,9 @@ const socket = io(SERVER_URL, {extraHeaders: {
   }});
 
 const SocketProvider = ({ children }) => {
+  const [busId,setBusId]=useState("")
   return (
-    <SocketContext.Provider value={socket}>{children}</SocketContext.Provider>
+    <SocketContext.Provider value={{socket,busId,setBusId}}>{children}</SocketContext.Provider>
   );
 };
 
