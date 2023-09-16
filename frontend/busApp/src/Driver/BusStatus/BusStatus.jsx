@@ -2,7 +2,7 @@ import { useCallback,useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import { request_url } from "../../constant/constants"
 import axios from "axios"
-import { axiosConfig } from "../../Constants/config"
+import {axiosConfig, SERVER_URL} from "../../Constants/config"
 
 function BusStatus()
 {
@@ -11,6 +11,7 @@ function BusStatus()
     const {id}=useParams()
     const [name,setName]=useState("")
     const [status,setStatus]=useState("")
+    const [route, setRoute]=useState("")
     const [startingPoint,setStartingPoint]=useState("")
     const [destinationPoint,setDestinationPoint]=useState("")
 
@@ -24,19 +25,23 @@ function BusStatus()
 
     async function submitDetails (){
 
-        if(name !== "" && status !== "" && startingPoint !== "" && destinationPoint !== "")
+        if(name !== "" && status !== "" && route !== "")
         {
             let payload={
                 driver:{
                     name
                 },
-                startingPoint ,
-                destinationPoint,
+                 route: route,
                 busStatus:status
             }
             console.log(payload)
-            console.log(request_url+`bus/${id}`)
-            const response=await axios.put(request_url+`bus/${id}`,payload,axiosConfig)
+            console.log(`${SERVER_URL}/api/v1/bus/${id}`)
+            const response=await axios.post(`${SERVER_URL}/api/v1/bus/${id}`,payload, {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                }
+            })
             console.log(response)
             navigate("/driver/dashboard")
         }
@@ -60,9 +65,9 @@ function BusStatus()
                         <button id="na" onClick={changeStatus} className="px-2 py-2 bg-blue-600 text-white">Not Active</button>
                     </div>
                     
-                    <input type="text" value={startingPoint}  onChange={(e)=>setStartingPoint(e.target.value)} placeholder="Enter Starting Point"/>
+                    <input type="route" value={route}  onChange={(e)=>setRoute(e.target.value)} placeholder="Enter Route"/>
 
-                    <input type="text" value={destinationPoint}  onChange={(e)=>setDestinationPoint(e.target.value)} placeholder="Enter Destination Point"/>
+                    {/*<input type="text" value={destinationPoint}  onChange={(e)=>setDestinationPoint(e.target.value)} placeholder="Enter Destination Point"/>*/}
 
                     <button onClick={submitDetails}>Set Details</button>
                     

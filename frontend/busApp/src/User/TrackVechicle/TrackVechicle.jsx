@@ -10,7 +10,7 @@ import {axiosConfig, SERVER_URL} from "../../Constants/config.js";
 
 function Map()
 {
-    const socket =useContext(SocketContext)
+    const socket = useContext(SocketContext).socket;
     const {id}=useParams()
     const [latitude,setLatitude]=useState(0)
     const [longitude,setLongitude]=useState(0)
@@ -66,7 +66,7 @@ export function TrackVechicle()
         googleMapsApiKey: MAPS_KEY
     })
 
-    const socket =useContext(SocketContext)
+    const socket =useContext(SocketContext).socket;
 
     const {id}=useParams()
     const [dataReceived,setDataReceived]=useState({})
