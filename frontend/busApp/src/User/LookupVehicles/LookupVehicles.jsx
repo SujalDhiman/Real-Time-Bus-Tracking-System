@@ -4,13 +4,20 @@ import {Link} from "react-router-dom"
 import {axiosConfig, SERVER_URL} from "../../Constants/config.js";
 
 
-function Card({busNumber,startingPoint,destinationPoint,active,objectId})
+function Card({busNumber,route ,active,objectId})
 {
     return (
         <div className="rounded-lg bg-slate-700 w-[400px] text-white">
             <h1><Link to= {`/user/trackVehicle/${objectId}`}>Bus Number :- {busNumber}</Link></h1>
-            <h1>Current Location :{startingPoint.toUpperCase()}</h1>
-            <h2>Target Location :{destinationPoint.toUpperCase()}</h2>
+            <h1>0--{
+                (
+                    () => {
+                        return route.stations.map((station) => {
+                            return (<><span>{`${station.stationName}`}</span>--</>);
+                        })
+                    }
+                )()
+            }0</h1>
             <div className="flex space-x-10">Bus Status :- &nbsp;  {active === "active"?<h1 className="w-[20px] h-[20px] rounded-full bg-green-600"></h1>:<h1 className="w-[20px] h-[20px] rounded-full bg-red-600"></h1>}</div>
         </div>
     )
@@ -22,10 +29,22 @@ export function LookupVehicles()
     const [preserveData,setPreserveData]=useState([])
     const [search,setSearch]=useState("")
     const [isLoading,setLoading]=useState(true)
+    const [busRoutes, setBusRoutes]=useState([]);
 
     function searchLocation()
     {
-        let filteredResult=dataReceived.filter((ele)=>ele.startingPoint.toLowerCase() === search.toLowerCase())
+        if(!busRoutes)
+            return;
+        let filteredRoutes = busRoutes.filter((route) => {
+            console.log(route);
+            return route.stations.some((station) => {
+                return station.stationName === search;
+            });
+        });
+
+        let filteredResult= dataReceived.filter((ele)=> filteredRoutes.some((route) => {
+            return route._id === ele.route._id;
+        }))
         setDataReceived(filteredResult)
     }
 
@@ -41,6 +60,10 @@ export function LookupVehicles()
     }
 
     useEffect(()=>{
+        (async () => {
+            const routes= await axios.get(`${SERVER_URL}/api/v1/busRoutes`, axiosConfig);
+            setBusRoutes(routes.data.routes);
+        })();
          getActiveBusDetails()
     },[])
 
@@ -55,7 +78,7 @@ export function LookupVehicles()
             <button className="px-4 py-2 text-1xl bg-blue-700 text-white rounded-tr-lg rounded-br-lg" onClick={searchLocation}>Search</button>
         </div>
         <div className="space-y-16 mt-10">
-        {(isLoading)?<h1 className="text-white"> Ruko Bhaiyo </h1>:dataReceived.map((ele)=><Card busNumber={ele.busNumber}  startingPoint={"sp"} destinationPoint={"dp"} active={ele.busStatus} key={ele._id} objectId={ele._id}/>)}
+        {(isLoading)?<h1 className="text-white"> Ruko Bhaiyo </h1>:dataReceived.map((ele)=><Card busNumber={ele.busNumber}  route={ele.route} active={ele.busStatus} key={ele._id} objectId={ele._id}/>)}
         </div>
         </>
     )

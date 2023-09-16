@@ -40,7 +40,7 @@ function Map()
 
 
 
-function Card({busNumber,busNumberPlate,contactInfo,startingLocation,destinationLocation,age,name,busStatus})
+function Card({busNumber,busNumberPlate,contactInfo,route,age,name,busStatus})
 {
 
     return (
@@ -51,8 +51,9 @@ function Card({busNumber,busNumberPlate,contactInfo,startingLocation,destination
             <h1>Driver Uncle :- {name}</h1>
             <h2>Driver Contact Information :- {contactInfo}</h2>
             <h2>Driver Age :- {age}</h2>
-            <h2>Starting Location :- {startingLocation}</h2>
-            <h2>Destination Location :- {destinationLocation}</h2>
+            <h2>Route :- 0--{(()=>{
+                return route.stations.map((station) => <><span>{`${station.stationName}`}</span>--</>)
+            })()}0</h2>
             <div className="flex">Bus Status :- &nbsp; {busStatus === "active"?<h1 className="w-[20px] h-[20px] rounded-full bg-green-600"></h1>:<h1 className="w-[20px] h-[20px]rounded-full bg-red-600"></h1>}</div>
         </div>
         </>
@@ -66,8 +67,6 @@ export function TrackVechicle()
         googleMapsApiKey: MAPS_KEY
     })
 
-    const socket =useContext(SocketContext).socket;
-
     const {id}=useParams()
     const [dataReceived,setDataReceived]=useState({})
     const [isLoading,setLoading]=useState(true)
@@ -79,24 +78,23 @@ export function TrackVechicle()
         setDataReceived(response.data.bus)
         setLoading(false)
     }
+
     useEffect(()=>{
         console.log(`busLocation-${id}`)
-        socket.on(`busLocation-${id}`,(payload)=>{
-            //console.log(payload)
-        })
         getActiveBusDetails()
     },[])
 
-    if(!isLoaded) return <h1>Ruko Yaar</h1>
+    if(!isLoaded)
+        return <h1>Ruko Yaar</h1>
     else
     {
-    return (
-        <>
-        <div className="space-y-16">
-        {isLoading?<h1> Ruko Bhaiyo </h1>:<Card busNumber={dataReceived.busNumber} busNumberPlate={dataReceived.busNumberPlate} contactInfo={dataReceived.driver.contactInfo} startingLocation={"sp"} destinationLocation={"dp"} age={dataReceived.driver.age} name={dataReceived.driver.name} busStatus={dataReceived.busStatus} key={dataReceived._id} objectId={dataReceived._id}/>}
-        </div>
-        <Map />
-        </>
-    )
+        return (
+            <>
+            <div className="space-y-16">
+            {isLoading?<h1> Ruko Bhaiyo </h1>:<Card busNumber={dataReceived.busNumber} busNumberPlate={dataReceived.busNumberPlate} contactInfo={dataReceived.driver.contactInfo} route={dataReceived.route} age={dataReceived.driver.age} name={dataReceived.driver.name} busStatus={dataReceived.busStatus} key={dataReceived._id} objectId={dataReceived._id}/>}
+            </div>
+            <Map />
+            </>
+        )
     }
 }

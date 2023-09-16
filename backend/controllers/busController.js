@@ -83,7 +83,6 @@ exports.activeBus=async function(req,res)
 {
     const allActiveBuses=await busSchema.find({busStatus:"active"}).populate({
         path: 'route',
-        select: 'routeName -_id',
         populate: {
             path: 'stations',
             select: 'stationName position -_id'
