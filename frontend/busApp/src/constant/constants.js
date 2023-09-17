@@ -1,3 +1,3 @@
-export const socket_url="https://mutually-noble-turtle.ngrok-free.app/";
+export const socket_url="https://bus-server.azurewebsites.net/";
 
-export const request_url="https://mutually-noble-turtle.ngrok-free.app/api/v1/"
+export const request_url="https://bus-server.azurewebsites.net/api/v1/"
