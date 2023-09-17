@@ -8,7 +8,7 @@ function App()
     return (
       <>
       <SocketProvider>
-        <Header />
+        {/*<Header />*/}
           <Outlet />
       </SocketProvider>
       </>
