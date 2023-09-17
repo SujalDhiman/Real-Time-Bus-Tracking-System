@@ -1,7 +1,14 @@
 import React, { useState,useEffect,useContext } from "react"
 import axios from "axios"
 import {Link,useParams} from "react-router-dom"
-import {DirectionsRenderer, GoogleMap, MarkerF, TrafficLayer, useLoadScript} from "@react-google-maps/api"
+import {
+    DirectionsRenderer,
+    DirectionsService,
+    GoogleMap,
+    MarkerF,
+    TrafficLayer,
+    useLoadScript
+} from "@react-google-maps/api"
 import { SocketContext } from "../../Context/SocketContext"
 import "./TrackVechicle.css"
 import {MAPS_KEY} from "../../Constants/keys.js";
@@ -13,6 +20,19 @@ const MemoizedDirectionsRenderer = React.memo(({ directions }) => (
 ));
 
 
+const MemoizedDirectionsService = React.memo(({ directionsOptions, setDirectionsResponse }) => (
+    <DirectionsService options={directionsOptions} callback={(response) => {
+        if (response !== null) {
+            if (response.status === 'OK') {
+                setDirectionsResponse(response);
+            } else {
+                console.log('response: ', response)
+            }
+        }
+    }}/>
+));
+
+
 function Map()
 {
     const socket = useContext(SocketContext).socket;
@@ -21,7 +41,7 @@ function Map()
     const [longitude,setLongitude]=useState(0)
 
     const [directionsResponse, setDirectionsResponse] = useState(null);
-    const directionsService = new google.maps.DirectionsService();
+    const [directionsOptions, setDirectionsOptions] = useState();
 
     useEffect(() => {
         socket.on(`busLocation-${id}`,(payload)=>{
@@ -46,16 +66,8 @@ function Map()
                 waypoints: waypoints,
                 travelMode: 'DRIVING',
             };
-
-            directionsService.route(directionsOptions, (response, status) => {
-                if (status === 'OK') {
-                    setDirectionsResponse(response);
-                } else {
-                    console.log('Directions request failed: ', status);
-                }
-            });
+            setDirectionsOptions(directionsOptions);
         })();
-
     },[])
 
 
@@ -64,6 +76,7 @@ function Map()
         <>
         <div><h1 className="text-white">latitude :{latitude}  longitude : {longitude} </h1></div>
             <GoogleMap zoom={10} center={{lat:latitude,lng:longitude}} mapContainerClassName="map-container">
+                { directionsOptions && <MemoizedDirectionsService directionsOptions={directionsOptions} setDirectionsResponse={setDirectionsResponse}/>}
                 {directionsResponse && <>
                     <TrafficLayer/>
                     <MemoizedDirectionsRenderer directions={directionsResponse }/>
