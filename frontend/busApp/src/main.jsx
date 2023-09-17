@@ -9,7 +9,7 @@ import { TrackVechicle } from './User/TrackVechicle/TrackVechicle.jsx'
 import SendLocation from './Driver/SendLocation/SendLocation.jsx'
 import TypeOfUser from "./TypeOfUser.jsx";
 import LoginDriver from './Driver/LoginDriver/LoginDriver.jsx'
-import RegisterDriver from './Driver/registerDriver/RegisterDriver.jsx'
+import RegisterDriver from './Driver/RegisterDriver/RegisterDriver.jsx'
 import BusDashboard from './Driver/busDashboard/BusDashboard.jsx'
 import BusStatus from './Driver/BusStatus/BusStatus.jsx'
 const router=createHashRouter([

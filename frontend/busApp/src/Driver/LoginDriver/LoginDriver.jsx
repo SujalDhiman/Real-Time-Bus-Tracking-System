@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { SocketContext } from "../../Context/SocketContext";
 import { Link } from "react-router-dom";
 import {SERVER_URL} from "../../Constants/config.js";
+import { BusNumberSVG, HidePasswordSVG, PasswordSVG } from "../../Context/Assets";
+import { PageContext } from "../../utilityFunctions/PageContext";
 
 function LoginDriver()
 {
@@ -13,6 +15,15 @@ function LoginDriver()
     const [toggle,setToggle]=useState("password")
     let {socket,busId,setBusId}=useContext(SocketContext)
     const [error,setError]=useState(false)
+    const {page,setPage}=useContext(PageContext)
+
+    function changePage(e)
+    {   
+    if(e.target.innerText === "Register")
+        setPage("Register")
+    else
+        setPage("Sign In")
+    }
 
     const viewPassword=useCallback(function ()
     {
@@ -57,25 +68,33 @@ function LoginDriver()
 
     return (
         <>
-            <div className="mt-10 flex flex-col justify-center items-center">
-                <h1 className="text-white text-3xl font-bold text-center">Bus Details</h1>
-                <div className="rounded-lg bg-gray-700 w-[500px] flex flex-col justify-center items-center space-y-14">
-                    <input type="text" value={busNumber} onChange={(e)=>setBusNumber(e.target.value)} placeholder="Enter Bus Number"/>
-    
-                    <div className="flex">
-                        <input type={toggle} value={password} onChange={(e)=>
+            <div className="flex flex-col justify-center bg-[#0F232C] mt-5 h-[100vh] rounded-lg">
+                <div className="rounded-lg  flex flex-col justify-center  items-center space-y-9">
+
+                    <div className="flex justify-center bg-black items-center px-4 rounded-md"> 
+                        <input type="text" className="outline-none bg-black text-white h-[50px] " value={busNumber} onChange={(e)=>setBusNumber(e.target.value)} placeholder="Enter Bus Number"/>
+                        <BusNumberSVG />
+                    </div>
+                    
+                    <div className="flex  bg-black  justify-center items-center rounded-md">
+                        <input type={toggle}  value={password} onChange={(e)=>
                             {
                                 if(e.target.value === "")
                                     setError(false)
                                 setPassword(e.target.value)
-                            }} placeholder="Enter Your Password" className="outline-none"/>
-                        <button onClick={viewPassword} className="px-4 py-1 bg-blue-700 text-white">{toggle === "password"? "Show":"Hide"}</button>
+                            }} 
+                            placeholder="Enter Your Password" 
+                            className="outline-none  bg-black text-white h-[50px] px-2 rounded-md"/>
+                        <button onClick={viewPassword} className="px-4 py-1 text-white">{toggle === "password"? <PasswordSVG />:<HidePasswordSVG />}</button>
                         
                     </div>
                     {error === true ? <h1 className="text-white">Incorrect Password </h1> : <h1></h1>} 
-                    <button className="px-4 py-2 rounded-lg text-white bg-blue-600" onClick={loginDriver}>Log in</button>
+                    
+                    <div className="flex flex-col items-center justify-center space-y-5">
+                        <h1 className="text-white text-xl">Want to register first ? <button onClick={changePage}  className="text-yellow-500 font-semibold text-xl">Register</button></h1>
+                        <button className="px-12 py-2 rounded-xl font-bold text-1xl text-white bg-[#004D52] hover:text-gray-300" onClick={loginDriver}>Log in</button>
+                    </div>
 
-                    <h1 className="text-white">Want to register first? <Link to="/driver/registerDriver">register</Link></h1>
 
                 </div>
             </div>
