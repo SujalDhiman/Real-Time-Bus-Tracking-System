@@ -1,5 +1,5 @@
 
-const SERVER_URL = 'https://mutually-noble-turtle.ngrok-free.app';
+const SERVER_URL = 'https://bus-server.azurewebsites.net';
 
 //Bypass ngrok browser warning will work with localhost as well
 const axiosConfig = {

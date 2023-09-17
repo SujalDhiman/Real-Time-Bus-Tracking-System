@@ -1,5 +1,5 @@
 import {Link} from "react-router-dom";
-import busStop from "../public/bus-stop.png";
+import busStop from "./assets/bus-stop.png";
 
 function ChatBot(){
     return  (
