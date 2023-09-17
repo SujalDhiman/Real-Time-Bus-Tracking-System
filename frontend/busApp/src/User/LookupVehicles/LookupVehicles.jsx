@@ -64,7 +64,7 @@ export function LookupVehicles()
             const routes= await axios.get(`${SERVER_URL}/api/v1/busRoutes`, axiosConfig);
             setBusRoutes(routes.data.routes);
         })();
-         getActiveBusDetails()
+        getActiveBusDetails()
     },[])
 
     return (
