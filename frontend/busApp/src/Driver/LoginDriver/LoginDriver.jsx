@@ -1,11 +1,12 @@
 import {useState,useEffect,useCallback,useContext} from "react"
 import axios from "axios"
-import { useNavigate } from "react-router-dom";
+import { useNavigate,Link } from "react-router-dom";
 import { SocketContext } from "../../Context/SocketContext";
-import { Link } from "react-router-dom";
 import {SERVER_URL} from "../../Constants/config.js";
-import { BusNumberSVG, HidePasswordSVG, PasswordSVG } from "../../Context/Assets";
-import { PageContext } from "../../utilityFunctions/PageContext";
+import { BusNumberSVG, HidePasswordSVG, PasswordSVG, toastPayload } from "../../Context/Assets";
+import { PageContext } from "../../Context/PageContext"
+import { toast,ToastContainer, Zoom } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 function LoginDriver()
 {
@@ -14,7 +15,6 @@ function LoginDriver()
     const [password,setPassword]=useState("")
     const [toggle,setToggle]=useState("password")
     let {socket,busId,setBusId}=useContext(SocketContext)
-    const [error,setError]=useState(false)
     const {page,setPage}=useContext(PageContext)
 
     function changePage(e)
@@ -24,7 +24,6 @@ function LoginDriver()
     else
         setPage("Sign In")
     }
-
     const viewPassword=useCallback(function ()
     {
         if(toggle === "password")
@@ -46,17 +45,20 @@ function LoginDriver()
 
             console.log(response)
 
+
             if(response.data.login === true)
             {
                 // navigate("/driver/login")
+                console.log("sign in before")
+                toast.success("Sign In Successful",toastPayload)
+                console.log("sign in after")
                 localStorage.setItem("id",response.data.bus._id)
                 setBusId(response.data.bus._id)
-                console.log("hello")
                 navigate("/driver/dashboard")
             }
             else
             {
-                setError(true)
+                toast.error("Check password or Register first",toastPayload)
                 console.log("Either Password is wrong or you have not registered")
             }
         }
@@ -77,18 +79,14 @@ function LoginDriver()
                     </div>
                     
                     <div className="flex  bg-black  justify-center items-center rounded-md">
-                        <input type={toggle}  value={password} onChange={(e)=>
-                            {
-                                if(e.target.value === "")
-                                    setError(false)
+                        <input type={toggle}  value={password} onChange={(e)=>                            
                                 setPassword(e.target.value)
-                            }} 
+                            } 
                             placeholder="Enter Your Password" 
                             className="outline-none  bg-black text-white h-[50px] px-2 rounded-md"/>
                         <button onClick={viewPassword} className="px-4 py-1 text-white">{toggle === "password"? <PasswordSVG />:<HidePasswordSVG />}</button>
                         
-                    </div>
-                    {error === true ? <h1 className="text-white">Incorrect Password </h1> : <h1></h1>} 
+                    </div> 
                     
                     <div className="flex flex-col items-center justify-center space-y-5">
                         <h1 className="text-white text-xl">Want to register first ? <button onClick={changePage}  className="text-yellow-500 font-semibold text-xl">Register</button></h1>
@@ -97,7 +95,9 @@ function LoginDriver()
 
 
                 </div>
+                <ToastContainer transition={Zoom} />
             </div>
+            
         </>
         )
 }

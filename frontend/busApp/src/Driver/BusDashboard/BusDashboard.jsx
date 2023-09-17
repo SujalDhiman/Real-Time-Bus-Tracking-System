@@ -4,6 +4,9 @@ import { Link } from "react-router-dom";
 import { request_url } from "../../constant/constants";
 import axios from "axios"
 import Shimmer from "../../Shimmer/Shimmer";
+import { toast,ToastContainer, Zoom } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+import { toastPayload } from "../../Context/Assets";
 
 function BusDashboard()
 {
@@ -12,7 +15,7 @@ function BusDashboard()
     const [busNumber,setBusNumber]=useState("")
     const [busNumberPlate,setBusNumberPlate]=useState("")
     const [busStatus,setBusStatus]=useState("")
-
+   
     const [isLoading,setIsLoading]=useState(true)
     const busId=localStorage.getItem("id")
     // const {socket,busId,setBusId}=useContext(SocketContext)
@@ -31,8 +34,9 @@ function BusDashboard()
     }   
 
     useEffect(()=>{
-        getDetails()
-        console.log("mai chala hu sahab")
+    
+      toast.success("Welcome to Dashboard", toastPayload);
+       getDetails()
     },[])
 
     return (
@@ -56,6 +60,7 @@ function BusDashboard()
             </div>
         )}
         </div>
+        <ToastContainer transition={Zoom}/>
         </>
     )
 }

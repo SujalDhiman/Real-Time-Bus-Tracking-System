@@ -6,7 +6,6 @@ const cloudinary=require("cloudinary")
 exports.register=async function(req,res)
 {
     const {busNumber,busNumberPlate,name,contactInfo,password}=req.body
-    console.log(req.body)
         try {
         let photoData={secure_url:"",photo_id:""}
         
@@ -29,16 +28,15 @@ exports.register=async function(req,res)
         }
         else
         {
-            console.log("hello guys")
             const bus=await busSchema.findOne({busNumberPlate})
             if(bus)
             {
-                res.status(400).send("Bus Already Registered")
+                res.status(200).json({
+                    success:false
+                })
             }
             else
             {
-                console.log("yaha tk aaya hu")
-                console.log(photoData)
                 let createdBus=await busSchema.create({busNumber,busNumberPlate,driver:{name,contactInfo,password},photo:photoData})
 
                 createdBus.save({validateBeforeSave:false})

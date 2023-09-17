@@ -2,6 +2,9 @@ import {useCallback, useEffect, useState} from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import axios from "axios"
 import {axiosConfig, SERVER_URL} from "../../Constants/config"
+import { toast,ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+import { toastPayload } from "../../Context/Assets";
 
 function BusStatus()
 {
@@ -46,7 +49,7 @@ function BusStatus()
         }
         else
         {
-            alert("Fill All Fields")
+            toast.error("Fill All Fields",toastPayload)
         }
     }
 
@@ -86,6 +89,7 @@ function BusStatus()
                     
                 </div>
             </div>
+            <ToastContainer />
         </>
         )
 }

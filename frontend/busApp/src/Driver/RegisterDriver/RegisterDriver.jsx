@@ -1,15 +1,14 @@
 import {useState,useEffect,useCallback, useContext} from "react"
-import {useNavigate} from "react-router-dom"
+import {useNavigate,Link} from "react-router-dom"
 import axios from "axios"
 import { SERVER_URL } from "../../Constants/config"
-import {Link} from "react-router-dom"
 import LoginDriver from "../LoginDriver/LoginDriver"
-import { UserSVG,PasswordSVG,HidePasswordSVG,BusNumberPlate,ContactSVG,BusNumberSVG } from "../../Context/Assets"
-
-
-
+import { UserSVG,PasswordSVG,HidePasswordSVG,BusNumberPlate,ContactSVG,BusNumberSVG,toastPayload } from "../../Context/Assets"
+import { PageContext } from "../../Context/PageContext"
+import { ToastContainer, Zoom, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import main from "../../assets/main.jpg"
-import { PageContext } from "../../utilityFunctions/PageContext"
+
 
 function RegisterDriver()
 {
@@ -59,18 +58,21 @@ function RegisterDriver()
                     'Content-Type': 'multipart/form-data',
                 },
             })
-
             if(response.data.success === true)
             {
+                toast.success("Registered Successfully",toastPayload)
                 setPage("Sign In")
+            }
+            else
+            {
+                toast.error("Driver Already Registered !!",toastPayload)
             }
         }
         else
         {
-            alert("Missing Fields Information")
+            toast.error("Missing Fields Information",toastPayload)
         }
     }
-
 
     return (
     <div className="w-screen h-screen flex overflow-hidden"> 
@@ -120,12 +122,13 @@ function RegisterDriver()
                 </div>
             </div>
         </div>) :  (
-            <LoginDriver />
+            <LoginDriver/>
         ) }
     </div>
     <div className="flex object-cover">
         <img src={main} alt="photo"/>
     </div>
+    <ToastContainer transition={Zoom}/>
     </div>
     )
 }
