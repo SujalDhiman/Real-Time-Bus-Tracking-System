@@ -1,4 +1,4 @@
 export function Header()
 {
-    return <h1 className="mt-5 text-white text-center font-bold text-3xl">Ghatiya UI ke liye maafi</h1>
+    return <h1 className="mt-5 text-white text- font-bold text-3xl">BUS TRACKER</h1>
 }
