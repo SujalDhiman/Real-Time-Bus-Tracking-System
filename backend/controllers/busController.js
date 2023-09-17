@@ -1,14 +1,27 @@
 const busSchema=require("../model/busModel.js")
 const routeSchema = require("../model/routeModel.js")
 const stationSchema = require("../model/stationModel.js");
+const cloudinary=require("cloudinary")
 
 exports.register=async function(req,res)
 {
-    const {busNumber,busNumberPlate,driver}=req.body
-    try
-    {
-        if(!(busNumber && busNumberPlate && driver ))
+    const {busNumber,busNumberPlate,name,contactInfo,password}=req.body
+    console.log(req.body)
+        try {
+        let photoData={secure_url:"",photo_id:""}
+        
+        if(req.files)
         {
+            const result=await cloudinary.v2.uploader.upload(req.files.photo.tempFilePath,{
+                folder:"testPhoto"
+            })
+            photoData.secure_url=result.secure_url
+            photoData.photo_id=result.public_id
+        }
+
+        if(!(busNumber && busNumberPlate && name && contactInfo && password ))
+        {
+            console.log("hello no guys")
             res.status(400).json({
                 allFields:false,
                 message:"All fields are not filled"
@@ -16,6 +29,7 @@ exports.register=async function(req,res)
         }
         else
         {
+            console.log("hello guys")
             const bus=await busSchema.findOne({busNumberPlate})
             if(bus)
             {
@@ -23,13 +37,15 @@ exports.register=async function(req,res)
             }
             else
             {
-                let createdBus=await busSchema.create({...req.body})
+                console.log("yaha tk aaya hu")
+                console.log(photoData)
+                let createdBus=await busSchema.create({busNumber,busNumberPlate,driver:{name,contactInfo,password},photo:photoData})
 
                 createdBus.save({validateBeforeSave:false})
                 console.log(createdBus)
                 res.status(200).json({
                     success:true,
-                    createdBus
+                    createdBus,
                 })
             }
         }

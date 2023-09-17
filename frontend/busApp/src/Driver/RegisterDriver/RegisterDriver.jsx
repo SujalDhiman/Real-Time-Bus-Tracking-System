@@ -22,6 +22,7 @@ function RegisterDriver()
     const [toggle,setToggle]=useState("password")
 
     const {page,setPage}=useContext(PageContext)
+    const [fileDetails,setFileDetails]=useState("")
 
     function changePage(e)
     {   
@@ -47,16 +48,17 @@ function RegisterDriver()
             let payload={
                 busNumber,
                 busNumberPlate,
-                driver:{
-                    name,
-                    contactInfo:contact,
-                    password
-                }
+                name,
+                contactInfo:contact,
+                password,
+                photo:fileDetails
             }
-
-            const response=await axios.post(`${SERVER_URL}/api/v1/register`,payload)
-
-            console.log(response)
+            console.log(payload)
+            const response=await axios.post(`${SERVER_URL}/api/v1/register`,payload,{
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            })
 
             if(response.data.success === true)
             {
@@ -71,7 +73,7 @@ function RegisterDriver()
 
 
     return (
-    <div className="w-screen h-screen flex overflow-hidden "> 
+    <div className="w-screen h-screen flex overflow-hidden"> 
     <div className="flex flex-col justify-center w-1/3 bg-[#0F232C] h-[100vh]">
         <div className="flex justify-evenly items-center pt-10 mt-16">
             <button className="px-4 py-2 text-2xl font-semibold text-white focus:text-orange-500" onClick={changePage}>Register</button>
@@ -79,7 +81,7 @@ function RegisterDriver()
         </div>
         {page === "Register"?(
             <div className="mt-5 flex flex-col justify-center items-center">
-            <div className="rounded-lg w-2/3 h-screen  flex flex-col  items-center space-y-9">
+            <div className="rounded-lg w-2/3 h-screen  flex flex-col  items-center space-y-5">
                 <div className="box-border flex bg-black items-center px-4 rounded-md"> 
                 <input type="text" className="outline-none bg-black text-white h-[50px] " value={busNumber} onChange={(e)=>setBusNumber(e.target.value)} placeholder="Enter Bus Number"/>
                 <BusNumberSVG />
@@ -105,9 +107,16 @@ function RegisterDriver()
                     <button onClick={viewPassword} className="px-4 py-1 text-white">{toggle === "password"? <PasswordSVG />:<HidePasswordSVG />}</button>
                 </div>
                 
+                <div className="flex pl-20">
+                    <input type="file" accept="image/*" onChange={(e)=>
+                        {
+                            setFileDetails(e.target.files[0])}
+                        }/>
+                </div>
+
                 <div className="flex flex-col items-center justify-center space-y-5">
-                    <h1 className="text-white">Have an account already ? <button onClick={changePage} className="text-yellow-500 font-semibold text-xl">Sign In</button></h1>
-                    <button className="px-12 py-2 rounded-xl font-bold text-1xl text-white bg-[#004D52] hover:text-gray-300" onClick={submitDetails}>Submit</button>
+                    <h1 className="text-white">Have an account already ? <button onClick={changePage} className="text-yellow-500 font-semibold ">Sign In</button></h1>
+                    <button className="px-12 py-2 rounded-xl font-bold  text-white bg-[#004D52] hover:text-gray-300" onClick={submitDetails}>Submit</button>
                 </div>
             </div>
         </div>) :  (

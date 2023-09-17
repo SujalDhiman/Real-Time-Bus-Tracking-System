@@ -33,6 +33,10 @@ const busSchema=new mongoose.Schema({
         type:String,
         enum:["active","notactive"],
         default:"notactive"
+    },
+    photo:{
+        secure_url:String,
+        photo_id:String
     }
 },{timestamps:true})
 

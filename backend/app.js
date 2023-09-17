@@ -5,11 +5,28 @@ const connectToDb=require("./Database/db")
 const busRouter=require("./router/busRoute")
 const { createServer } = require("http");
 const { Server } = require("socket.io");
+const expressFileUpload=require("express-fileupload")
+const cloudinary=require("cloudinary")
+
+
+//enabling cloudinary for image upload
+cloudinary.config({ 
+cloud_name: process.env.CLOUDINARY_NAME, 
+api_key: process.env.CLOUDINARY_API_KEY, 
+api_secret:process.env.CLOUDINARY_API_SECRET
+});
+
 
 app.use(cors({
     origin:"*",
     methods:["GET","POST","DELETE","PATCH"],
 }))
+
+app.use(expressFileUpload({
+    useTempFiles:true,
+    tempFileDir:"/tmp/"
+}))
+
 
 app.options('*', cors());
 
