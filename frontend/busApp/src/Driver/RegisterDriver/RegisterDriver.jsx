@@ -80,7 +80,7 @@ function RegisterDriver()
         {page === "Register"?(
             <div className="mt-5 flex flex-col justify-center items-center">
             <div className="rounded-lg w-2/3 h-screen  flex flex-col  items-center space-y-9">
-                <div className="flex bg-black items-center px-4 rounded-md"> 
+                <div className="box-border flex bg-black items-center px-4 rounded-md"> 
                 <input type="text" className="outline-none bg-black text-white h-[50px] " value={busNumber} onChange={(e)=>setBusNumber(e.target.value)} placeholder="Enter Bus Number"/>
                 <BusNumberSVG />
                 </div>
