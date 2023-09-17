@@ -3,6 +3,7 @@ import {useNavigate} from "react-router-dom"
 import axios from "axios"
 import { SERVER_URL } from "../../Constants/config"
 import {Link} from "react-router-dom"
+import LoginDriver from "../LoginDriver/LoginDriver"
 
 function RegisterDriver()
 {
@@ -13,7 +14,7 @@ function RegisterDriver()
     const [contact,setContact]=useState("")
     const [password,setPassword]=useState("")
     const [toggle,setToggle]=useState("password")
-
+    const [page,setPage]=useState("Register")
 
     const viewPassword=useCallback(function ()
     {
@@ -53,9 +54,22 @@ function RegisterDriver()
         }
     }
 
+    function changePage(e)
+    {   
+        if(e.target.innerText === "Register")
+            setPage("Register")
+        else
+            setPage("Sign In")
+    }
+
     return (
     <>
-        <div className="mt-10 flex flex-col justify-center items-center">
+        <div>
+            <button className="px-4 py-2 bg-blue-600 text-white" onClick={changePage}>Register</button>
+            <button className="px-4 py-2 bg-blue-600 text-white" onClick={changePage}>Sign In</button>
+        </div>
+        {page === "Register"?(
+            <div className="mt-10 flex flex-col justify-center items-center">
             <h1 className="text-white text-3xl font-bold text-center">Bus Details</h1>
             <div className="rounded-lg bg-gray-700 w-[500px] flex flex-col justify-center items-center space-y-14">
                 <input type="text" value={busNumber} onChange={(e)=>setBusNumber(e.target.value)} placeholder="Enter Bus Number"/>
@@ -76,7 +90,7 @@ function RegisterDriver()
 
                 <h1 className="text-white">Already signed in <Link to={"/driver/login"}>Login</Link></h1>
             </div>
-        </div>
+        </div>) :  <LoginDriver />  }
     </>
     )
 }
