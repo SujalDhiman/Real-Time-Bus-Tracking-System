@@ -1,7 +1,7 @@
-import {useState, useEffect, useContext, useDeferredValue} from "react"
+import {useState, useEffect, useContext, useDeferredValue, useRef} from "react"
 import React from 'react';
 import {
-    DirectionsRenderer,
+    DirectionsRenderer, DirectionsService,
     GoogleMap,
     MarkerF,
     TrafficLayer,
@@ -18,12 +18,21 @@ const MemoizedDirectionsRenderer = React.memo(({ directions }) => (
     <DirectionsRenderer options={{ directions: directions }} />
 ));
 
+const MemoizedDirectionsService = React.memo(({ directionsOptions, setDirectionsResponse }) => (
+    <DirectionsService options={directionsOptions} callback={(response) => {
+        if (response !== null) {
+            if (response.status === 'OK') {
+                setDirectionsResponse(response);
+            } else {
+                console.log('response: ', response)
+            }
+        }
+    }}/>
+));
 
 function Map()
 {
     const {socket} =useContext(SocketContext)
-
-
 
     const [latitude,setLatitude]=useState(0);
     const [longitude,setLongitude]=useState(0);
@@ -34,7 +43,7 @@ function Map()
     const differedLongitude = useDeferredValue(longitude);
 
     const [directionsResponse, setDirectionsResponse] = useState(null);
-    const directionsService = new google.maps.DirectionsService();
+    const [directionsOptions, setDirectionsOptions] = useState();
 
 
     const {id}=useParams()
@@ -83,14 +92,7 @@ function Map()
             waypoints: waypoints,
             travelMode: 'DRIVING',
         };
-
-        directionsService.route(directionsOptions, (response, status) => {
-            if (status === 'OK') {
-                setDirectionsResponse(response);
-            } else {
-                console.log('Directions request failed: ', status);
-            }
-        });
+        setDirectionsOptions(directionsOptions);
     },[busRoute])
 
     useEffect(() => {
@@ -105,6 +107,7 @@ function Map()
         <>
         <div><h1 className="text-white">latitude :{differedLatitude}  longitude : {differedLongitude} </h1></div>
             <GoogleMap zoom={10} center={{lat:differedLatitude,lng:differedLongitude}} mapContainerClassName="map-container">
+                { directionsOptions && <MemoizedDirectionsService directionsOptions={directionsOptions} setDirectionsResponse={setDirectionsResponse}/>}
                 {directionsResponse && <>
                     <TrafficLayer/>
                     <MemoizedDirectionsRenderer directions={directionsResponse}/>
