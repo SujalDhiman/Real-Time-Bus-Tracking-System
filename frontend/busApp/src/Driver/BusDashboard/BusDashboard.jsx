@@ -15,7 +15,7 @@ function BusDashboard()
     const [busNumber,setBusNumber]=useState("")
     const [busNumberPlate,setBusNumberPlate]=useState("")
     const [busStatus,setBusStatus]=useState("")
-   
+    const [imageUrl,setImageUrl]=useState("")
     const [isLoading,setIsLoading]=useState(true)
     const busId=localStorage.getItem("id")
     // const {socket,busId,setBusId}=useContext(SocketContext)
@@ -25,12 +25,14 @@ function BusDashboard()
     {
         const response=await axios.get(request_url+`activeBus/${busId}`)
         const Data=response.data.bus
+        console.log(response)
         setName(Data.driver.name)
         setContact(Data.driver.contactInfo)
         setBusNumber(Data.busNumber)
         setBusNumberPlate(Data.busNumberPlate)
         setBusStatus(Data.busStatus)
         setIsLoading(false)
+        setImageUrl(response.data.bus.photo.secure_url)
     }   
 
     useEffect(()=>{
@@ -47,7 +49,7 @@ function BusDashboard()
             <Link to={`/driver/setStatus/${busId}`}>Update Status</Link>
         </div>
         <div className="mt-5 flex justify-center items-center">   
-        {isLoading === true ?   <Shimmer></Shimmer>: (
+        {isLoading === true ?   <Shimmer></Shimmer>: (<div className="flex justify-center items-center space-x-5">
             <div className="bg-gray-800 text-white w-[400px] h-[200px] flex flex-col items-center space-y-3">
                 <h1>Driver Name :- {name}</h1>
                 <h1>Bus Number  :- {busNumber}</h1>
@@ -57,6 +59,10 @@ function BusDashboard()
                 <h1>Bus Status :- &nbsp;</h1>
                 {busStatus === "notactive" ? <div className="w-5 h-5 animate-pulse bg-red-600 rounded-full"></div>:<div className="w-5 h-5 animate-pulse bg-green-600 rounded-full"></div>}
                 </div>
+            </div>
+            <div className="w-[300px] h-[300px] bg-white">
+                <img src={imageUrl} alt="photo"/>
+            </div>
             </div>
         )}
         </div>

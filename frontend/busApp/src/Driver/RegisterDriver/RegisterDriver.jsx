@@ -19,7 +19,7 @@ function RegisterDriver()
     const [contact,setContact]=useState("")
     const [password,setPassword]=useState("")
     const [toggle,setToggle]=useState("password")
-
+    const [isLoading,setIsLoading]=useState(false)
     const {page,setPage}=useContext(PageContext)
     const [fileDetails,setFileDetails]=useState("")
 
@@ -44,6 +44,7 @@ function RegisterDriver()
     {
         if(busNumber !== "" && busNumberPlate !== "" && name !== "" && contact !== "" && password !== "")
         {   
+            setIsLoading(true)
             let payload={
                 busNumber,
                 busNumberPlate,
@@ -58,6 +59,7 @@ function RegisterDriver()
                     'Content-Type': 'multipart/form-data',
                 },
             })
+            setIsLoading(false)
             if(response.data.success === true)
             {
                 toast.success("Registered Successfully",toastPayload)
@@ -118,7 +120,13 @@ function RegisterDriver()
 
                 <div className="flex flex-col items-center justify-center space-y-5">
                     <h1 className="text-white">Have an account already ? <button onClick={changePage} className="text-yellow-500 font-semibold ">Sign In</button></h1>
-                    <button className="px-12 py-2 rounded-xl font-bold  text-white bg-[#004D52] hover:text-gray-300" onClick={submitDetails}>Submit</button>
+                    {isLoading ? (
+                       <div className="animate-spin rounded-full h-6 w-6 border-t-4 border-b-4 border-l-3 border-r-3 border-yellow-500 mx-auto"></div>
+                    ) : (
+                         <button className="px-12 py-2 rounded-xl font-bold  text-white bg-[#004D52] hover:text-gray-300" onClick={submitDetails}>Submit</button> 
+                    )}
+                   
+                    
                 </div>
             </div>
         </div>) :  (
