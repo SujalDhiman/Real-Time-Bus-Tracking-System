@@ -1,7 +1,7 @@
 import {useState, useEffect, useContext, useDeferredValue, useRef} from "react"
 import React from 'react';
 import {
-    DirectionsRenderer, DirectionsService,
+    DirectionsRenderer, DirectionsService, DistanceMatrixService,
     GoogleMap,
     MarkerF,
     TrafficLayer,
@@ -30,6 +30,13 @@ const MemoizedDirectionsService = React.memo(({ directionsOptions, setDirections
     }}/>
 ));
 
+const MemorizedDistanceService = React.memo(({ pos, distanceOptions, setDistanceResponse }) => (
+    <DistanceMatrixService options={distanceOptions} callback={(response) => {
+        console.log("hi");
+        setDistanceResponse(response.rows[0].elements);
+    }}/>
+));
+
 function Map()
 {
     const {socket} =useContext(SocketContext)
@@ -42,8 +49,12 @@ function Map()
     const differedLatitude = useDeferredValue(latitude);
     const differedLongitude = useDeferredValue(longitude);
 
+    const [waypoints, setWaypoints] = useState();
     const [directionsResponse, setDirectionsResponse] = useState(null);
     const [directionsOptions, setDirectionsOptions] = useState();
+    const [distanceOptions, setDistanceOptions] = useState();
+    const [distanceResponse, setDistanceResponse] = useState();
+    const [progress, setProgress] = useState();
 
 
     const {id}=useParams()
@@ -84,7 +95,8 @@ function Map()
         busRoute.data.bus.route.stations.map((station) => {
             waypoints.push({"location": `${station.position[0]} ${station.position[1]}`, "stopover": true});
         });
-        console.log(waypoints);
+        //console.log(waypoints);
+        setWaypoints(waypoints);
 
         const directionsOptions = {
             destination: waypoints[waypoints.length-1].location ,
@@ -93,13 +105,48 @@ function Map()
             travelMode: 'DRIVING',
         };
         setDirectionsOptions(directionsOptions);
+
+        const distanceOptions = {
+            origins: [`${latitude} ${longitude}`],
+            //origins: [`30.2828877 78.0746451`],
+            destinations: waypoints.map((waypoint) => {return waypoint.location}),
+            travelMode: 'DRIVING',
+            unitSystem: 0.0,
+            avoidHighways: false,
+            avoidTolls: false,
+        }
+
+        setDistanceOptions(distanceOptions);
     },[busRoute])
 
     useEffect(() => {
         //Only emitting when there is a change in position
         socket.emit(`busId`,{latitude: differedLatitude, longitude: differedLongitude,id})
         console.log(differedLatitude, differedLongitude);
+
+        if(distanceOptions)
+            setDistanceOptions((distanceOptions) => {distanceOptions.origins = [`${latitude} ${longitude}`]
+                return distanceOptions;
+            });
     }, [differedLatitude, differedLongitude])
+
+    useEffect(() => {
+        if(!distanceResponse || !distanceResponse[0].distance || !distanceResponse[0].duration)
+            return;
+        const updateProgress = [];
+
+        let info = Object.keys(distanceResponse);
+
+        info.forEach((info) => {
+            updateProgress.push({
+                distance: distanceResponse[info].distance.text,
+                eta: distanceResponse[info].duration.text,
+                reached: (progress && progress[info].reached) || distanceResponse[info].distance.value < 1000?true:false
+            });
+        })
+        //console.log(progress);
+        setProgress(updateProgress);
+    }, [distanceResponse])
 
 
 
@@ -111,9 +158,14 @@ function Map()
                 {directionsResponse && <>
                     <TrafficLayer/>
                     <MemoizedDirectionsRenderer directions={directionsResponse}/>
+
                 </>}
+                { distanceOptions && <MemorizedDistanceService pos={distanceOptions.origins[0]} distanceOptions={distanceOptions} setDistanceResponse={setDistanceResponse}/>}
                 <MarkerF position={{lat:differedLatitude,lng:differedLongitude}} />
             </GoogleMap>
+            <ul>
+                {progress && progress.map((p) => {return (<li className={p.reached?"text-white":"text-red-700"}>{`* - ${p.distance} ${p.eta}`}</li>)})}
+            </ul>
         </>
     )
 }

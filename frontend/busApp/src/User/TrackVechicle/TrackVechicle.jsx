@@ -3,7 +3,7 @@ import axios from "axios"
 import {Link,useParams} from "react-router-dom"
 import {
     DirectionsRenderer,
-    DirectionsService,
+    DirectionsService, DistanceMatrixService,
     GoogleMap,
     MarkerF,
     TrafficLayer,
@@ -32,6 +32,13 @@ const MemoizedDirectionsService = React.memo(({ directionsOptions, setDirections
     }}/>
 ));
 
+const MemorizedDistanceService = React.memo(({ pos, distanceOptions, setDistanceResponse }) => (
+    <DistanceMatrixService options={distanceOptions} callback={(response) => {
+        console.log("hi");
+        setDistanceResponse(response.rows[0].elements);
+    }}/>
+));
+
 
 function Map()
 {
@@ -42,6 +49,9 @@ function Map()
 
     const [directionsResponse, setDirectionsResponse] = useState(null);
     const [directionsOptions, setDirectionsOptions] = useState();
+    const [distanceOptions, setDistanceOptions] = useState();
+    const [distanceResponse, setDistanceResponse] = useState();
+    const [progress, setProgress] = useState();
 
     useEffect(() => {
         socket.on(`busLocation-${id}`,(payload)=>{
@@ -67,9 +77,45 @@ function Map()
                 travelMode: 'DRIVING',
             };
             setDirectionsOptions(directionsOptions);
+
+            const distanceOptions = {
+                origins: [`${latitude} ${longitude}`],
+                //origins: [`30.2828877 78.0746451`],
+                destinations: waypoints.map((waypoint) => {return waypoint.location}),
+                travelMode: 'DRIVING',
+                unitSystem: 0.0,
+                avoidHighways: false,
+                avoidTolls: false,
+            }
+
+            setDistanceOptions(distanceOptions);
         })();
     },[])
 
+    useEffect(() => {
+        if(distanceOptions)
+            setDistanceOptions((distanceOptions) => {distanceOptions.origins = [`${latitude} ${longitude}`]
+                return distanceOptions;
+            });
+    }, [latitude, longitude])
+
+    useEffect(() => {
+        if(!distanceResponse || !distanceResponse[0].distance || !distanceResponse[0].duration)
+            return;
+        const updateProgress = [];
+
+        let info = Object.keys(distanceResponse);
+
+        info.forEach((info) => {
+            updateProgress.push({
+                distance: distanceResponse[info].distance.text,
+                eta: distanceResponse[info].duration.text,
+                reached: (progress && progress[info].reached) || distanceResponse[info].distance.value < 1000?true:false
+            });
+        })
+        //console.log(progress);
+        setProgress(updateProgress);
+    }, [distanceResponse])
 
 
     return (
@@ -81,8 +127,12 @@ function Map()
                     <TrafficLayer/>
                     <MemoizedDirectionsRenderer directions={directionsResponse }/>
                 </>}
+                { distanceOptions && <MemorizedDistanceService pos={distanceOptions.origins[0]} distanceOptions={distanceOptions} setDistanceResponse={setDistanceResponse}/>}
                 <MarkerF position={{lat:latitude,lng:longitude}} />
             </GoogleMap>
+            <ul>
+                {progress && progress.map((p) => {return (<li className={p.reached?"text-white":"text-red-700"}>{`* - ${p.distance} ${p.eta}`}</li>)})}
+            </ul>
         </>
     )
 }
