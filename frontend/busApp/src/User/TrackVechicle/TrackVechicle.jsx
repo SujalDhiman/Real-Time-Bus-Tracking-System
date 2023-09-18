@@ -97,9 +97,8 @@ function Card({busNumber,busNumberPlate,contactInfo,route,age,name,busStatus})
         <div className="rounded-lg bg-slate-700 w-[400px] text-white">
             <h1>Bus Number :- {busNumber}</h1>
             <h1>Bus Number Plate :- {busNumberPlate}</h1>
-            <h1>Driver Uncle :- {name}</h1>
+            <h1>Driver Name :- {name}</h1>
             <h2>Driver Contact Information :- {contactInfo}</h2>
-            <h2>Driver Age :- {age}</h2>
             <h2>Route :- 0--{(()=>{
                 return route.stations.map((station) => <><span>{`${station.stationName}`}</span>--</>)
             })()}0</h2>
@@ -134,13 +133,13 @@ export function TrackVechicle()
     },[])
 
     if(!isLoaded)
-        return <h1>Ruko Yaar</h1>
+        return <h1>Loading...</h1>
     else
     {
         return (
             <>
             <div className="space-y-16">
-            {isLoading?<h1> Ruko Bhaiyo </h1>:<Card busNumber={dataReceived.busNumber} busNumberPlate={dataReceived.busNumberPlate} contactInfo={dataReceived.driver.contactInfo} route={dataReceived.route} age={dataReceived.driver.age} name={dataReceived.driver.name} busStatus={dataReceived.busStatus} key={dataReceived._id} objectId={dataReceived._id}/>}
+            {isLoading?<h1> Loading... </h1>:<Card busNumber={dataReceived.busNumber} busNumberPlate={dataReceived.busNumberPlate} contactInfo={dataReceived.driver.contactInfo} route={dataReceived.route} age={dataReceived.driver.age} name={dataReceived.driver.name} busStatus={dataReceived.busStatus} key={dataReceived._id} objectId={dataReceived._id}/>}
             </div>
             <Map />
             </>

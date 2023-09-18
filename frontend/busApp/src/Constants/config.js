@@ -1,5 +1,5 @@
 
-const SERVER_URL = 'http://localhost:10000';
+const SERVER_URL = 'https://bus-server.azurewebsites.net';
 
 //Bypass ngrok browser warning will work with localhost as well
 const axiosConfig = {
