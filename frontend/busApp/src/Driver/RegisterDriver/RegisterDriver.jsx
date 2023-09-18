@@ -80,8 +80,8 @@ function RegisterDriver()
     <div className="w-screen h-screen flex overflow-hidden"> 
     <div className="flex flex-col justify-center w-1/3 bg-[#0F232C] h-[100vh]">
         <div className="flex justify-evenly items-center pt-10 mt-16">
-            <button className="px-4 py-2 text-2xl font-semibold text-white focus:text-orange-500" onClick={changePage}>Register</button>
-            <button className="px-4 py-2 text-2xl font-semibold text-white focus:text-orange-500" onClick={changePage}>Sign In</button>
+            <button className={`px-4 py-2 text-2xl font-semibold ${page === "Sign In" ?"text-white" : "text-orange-600"  }`}  onClick={changePage}>Register</button>
+            <button className={`px-4 py-2 text-2xl font-semibold ${page === "Register" ?"text-white":"text-orange-600"}`} onClick={changePage}>Sign In</button>
         </div>
         {page === "Register"?(
             <div className="mt-5 flex flex-col justify-center items-center">

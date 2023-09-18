@@ -91,7 +91,7 @@ function LoginDriver()
                     </div> 
                     
                     <div className="flex flex-col items-center justify-center space-y-5">
-                        <h1 className="text-white text-xl">Want to register first ? <button onClick={changePage}  className="text-yellow-500 font-semibold text-xl">Register</button></h1>
+                        <h1 className="text-white ">Want to register first ? <button onClick={changePage}  className="text-yellow-500 font-semibold text-xl">Register</button></h1>
                         {isLoading ? (
                             <div className="animate-spin rounded-full h-6 w-6 border-t-4 border-b-4 border-l-3 border-r-3 border-yellow-500 mx-auto"></div>
                         ) : (
