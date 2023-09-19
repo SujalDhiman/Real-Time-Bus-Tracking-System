@@ -72,30 +72,25 @@ function LoginDriver()
 
     return (
         <>
-            <div className="flex flex-col justify-center bg-[#0F232C] mt-5 h-[100vh] rounded-lg">
-                <div className="rounded-lg  flex flex-col justify-center  items-center space-y-9">
+            <div className="flex flex-col mt-5 h-[100vh] rounded-lg items-center justify-center">
+                <div className="rounded-lg  flex flex-col space-y-[4vh]">
 
-                    <div className="flex justify-center bg-black items-center px-4 rounded-md"> 
-                        <input type="text" className="outline-none bg-black text-white h-[50px] " value={busNumber} onChange={(e)=>setBusNumber(e.target.value)} placeholder="Enter Bus Number"/>
-                        <BusNumberSVG />
-                    </div>
+                <div className="flex bg-white border border-black w-[290px] h-[50px] justify-between items-center rounded-lg p-2 shadow-xl">
+                    <input type="text" className="placeholder-black focus:outline-none" value={busNumber} onChange={(e) => setBusNumber(e.target.value)} placeholder="Bus Number"/>
+                    <BusNumberSVG />
+                </div>
                     
-                    <div className="flex  bg-black  justify-center items-center rounded-md">
-                        <input type={toggle}  value={password} onChange={(e)=>                            
-                                setPassword(e.target.value)
-                            } 
-                            placeholder="Enter Your Password" 
-                            className="outline-none  bg-black text-white h-[50px] px-2 rounded-md"/>
-                        <button onClick={viewPassword} className="px-4 py-1 text-white">{toggle === "password"? <PasswordSVG />:<HidePasswordSVG />}</button>
-                        
-                    </div> 
+                <div className="flex bg-white border border-black w-[290px] h-[50px] justify-between items-center rounded-lg p-2 shadow-xl">
+                    <input type={toggle} value={password}  className="placeholder-black focus:outline-none" onChange={(e)=>setPassword(e.target.value)} placeholder="Password"/>
+                    <button onClick={viewPassword} className="">{toggle === "password"? <PasswordSVG />:<HidePasswordSVG />}</button>
+                </div>
                     
                     <div className="flex flex-col items-center justify-center space-y-5">
-                        <h1 className="text-white ">Want to register first ? <button onClick={changePage}  className="text-yellow-500 font-semibold text-xl">Register</button></h1>
+                        <h1 className="text-[#717171] text-[15px]">Don't have an account ? <button onClick={changePage}  className="text-[#E93F4B]">Register</button></h1>
                         {isLoading ? (
                             <div className="animate-spin rounded-full h-6 w-6 border-t-4 border-b-4 border-l-3 border-r-3 border-yellow-500 mx-auto"></div>
                         ) : (
-                        <button className="px-12 py-2 rounded-xl font-bold text-1xl text-white bg-[#004D52] hover:text-gray-300" onClick={loginDriver}>Log in</button>
+                        <button className="px-10 py-2 w-[200px] rounded-full font-bold  text-white bg-[#E93F4B] hover:text-gray-300 text-[20px]" onClick={loginDriver}>Log in</button> 
                         )}   
                     </div>
                 </div>
