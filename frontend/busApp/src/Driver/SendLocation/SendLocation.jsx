@@ -53,6 +53,7 @@ function Map()
     const [directionsResponse, setDirectionsResponse] = useState(null);
     const [directionsOptions, setDirectionsOptions] = useState();
     const [distanceOptions, setDistanceOptions] = useState();
+    const [stopGPS,setStopGPS]=useState(0)
 
     //ETA
     const [distanceResponse, setDistanceResponse] = useState();
@@ -72,11 +73,17 @@ function Map()
             console.error(`ERROR(${err.code}): ${err.message}`);
         }
 
-        navigator.geolocation.watchPosition((position)=>{
+        let navID=navigator.geolocation.watchPosition((position)=>{
             setLatitude(position.coords.latitude);
             setLongitude(position.coords.longitude);
         }, error, options);
+        setStopGPS(navID)
 
+        //cleanup function when component unmounts
+        return ()=>{
+            if(navID)
+                navigator.geolocation.clearWatch(navID)
+        }
 
     },[latitude,longitude])
 
@@ -159,7 +166,24 @@ function Map()
         localStorage.setItem("progress",JSON.stringify( progress));
     }, [distanceResponse])
 
-
+    //function to pause  and resume GPS
+    function monitorStatus(e)
+    {
+        if(e.target.id === "pause")
+        {
+            navigator.geolocation.clearWatch(stopGPS)
+            setStopGPS(0)
+        }
+        else
+        {
+            // navigator.geolocation.getCurrentPosition((position)=>{
+            //     setLatitude(position.coords.latitude)
+            //     setLongitude(position.coords.longitude)
+            // })
+            setLatitude(0)
+            setLongitude(0)
+        }
+    }
 
     return (
         <>
@@ -177,6 +201,15 @@ function Map()
             <ul>
                 {progress && progress.map((p) => {return (<li className={p.reached?"text-white":"text-red-700"}>{`* - ${p.distance} ${p.eta}`}</li>)})}
             </ul>
+
+            <div className="flex space-x-10">
+                <button className="mt-10 h-20 w-20 border-2 border-yellow-300 text-black rounded-full bg-yellow-500" onClick={monitorStatus} id="pause">
+                    Stop
+                </button>
+                <button className="mt-10 h-20 w-20 border-2 border-green-500 text-black rounded-full bg-green-500" onClick={monitorStatus} id="start">
+                    Resume
+                </button>
+            </div>
         </>
     )
 }
