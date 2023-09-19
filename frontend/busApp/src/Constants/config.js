@@ -10,4 +10,6 @@ const axiosConfig = {
     }
 }
 
-export {SERVER_URL, axiosConfig};
+const adminAddress = "shreeshnautiyal3@gmail.com";
+
+export {SERVER_URL, axiosConfig, adminAddress};
