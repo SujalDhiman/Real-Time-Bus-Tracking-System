@@ -53,6 +53,8 @@ function Map()
     const [directionsResponse, setDirectionsResponse] = useState(null);
     const [directionsOptions, setDirectionsOptions] = useState();
     const [distanceOptions, setDistanceOptions] = useState();
+
+    //ETA
     const [distanceResponse, setDistanceResponse] = useState();
     const [progress, setProgress] = useState();
 
@@ -85,6 +87,9 @@ function Map()
             }
         )
         console.log("here");
+        if(localStorage.getItem("progress") !== null && localStorage.getItem("progress") !== "undefined") {
+            setProgress(JSON.parse(localStorage.getItem("progress")));
+        }
     }, [])
 
     useEffect(() => {
@@ -146,6 +151,7 @@ function Map()
         })
         //console.log(progress);
         setProgress(updateProgress);
+        localStorage.setItem("progress",JSON.stringify( progress));
     }, [distanceResponse])
 
 
