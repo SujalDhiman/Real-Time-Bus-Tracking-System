@@ -13,8 +13,9 @@ import { SocketContext } from "../../Context/SocketContext"
 import "./TrackVechicle.css"
 import {MAPS_KEY} from "../../Constants/keys.js";
 import {axiosConfig, SERVER_URL} from "../../Constants/config.js";
-
-
+import { ToastContainer, Zoom, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { toastPayload } from "../../Context/Assets"
 const MemoizedDirectionsRenderer = React.memo(({ directions }) => (
     <DirectionsRenderer options={{ directions: directions }} />
 ));
@@ -35,24 +36,41 @@ const MemoizedDirectionsService = React.memo(({ directionsOptions, setDirections
 
 function Map()
 {
-    const socket = useContext(SocketContext).socket;
+    const {socket} = useContext(SocketContext);
     const {id}=useParams()
     const [latitude,setLatitude]=useState(0)
     const [longitude,setLongitude]=useState(0)
-
+    const [panicDetails,setPanicDetails]=useState({
+        alertId:"",
+        alertLatitude:"",
+        alertLongitude:"",
+        alertSignal:false
+    })
     const [directionsResponse, setDirectionsResponse] = useState(null);
     const [directionsOptions, setDirectionsOptions] = useState();
     const [progress, setProgress] = useState();
 
     useEffect(() => {
         socket.on(`busLocation-${id}`,(payload)=>{
-            console.log(payload)
             setLatitude(payload.latitude)
             setLongitude(payload.longitude)
             setProgress(payload.progress)}
         )
-            console.log(progress);
     }, [])
+
+    //listening for panic alarm
+    useEffect(()=>{
+        socket.on("sendAlarm",(payload)=>{
+            toast.warn("An Emergency Occured",{
+                autoClose:1000,
+                position:"top-center",
+                theme:"dark"
+            })
+            setPanicDetails({...panicDetails,alertId:`${payload.id}`,alertLatitude:`${payload.latitude}`,alertLongitude:`${payload.longitude}`,alertSignal:true})
+        })
+    },[])
+
+
 
     useEffect(()=> {
         (async () => {
@@ -73,6 +91,15 @@ function Map()
         })();
     },[])
 
+    function panic()
+    {
+        let payload={
+            id,
+            latitude,
+            longitude
+        }
+        socket.emit("panicAlarm",payload)
+    }
 
     return (
         <>
@@ -88,6 +115,21 @@ function Map()
             <ul>
                 {progress && progress.map((p) => {return (<li className={p.reached?"text-white":"text-red-700"}>{`* - ${p.distance} ${p.eta}`}</li>)})}
             </ul>
+
+            <div className="mt-10">
+                <button className="w-20 h-20 border-2 border-red-600 bg-red-600 rounded-full text-white hover:text-gray-400" onClick={panic} >PANIC</button>
+            </div>
+            <div className="flex flex-col items-center justify-center">
+            {panicDetails.alertSignal === true ? <div className="w-[400px] h-[100px] border-2 bg-black text-white">
+                <h1>Bus ID :-{panicDetails.alertId}</h1>
+                <h1>Alert Latitude :- {panicDetails.alertLatitude} </h1>
+                <h1>Alert Longitude :- {panicDetails.alertLongitude}</h1>
+                <button onClick={()=>{
+                    setPanicDetails({...panicDetails,alertSignal:false})
+                }} className="bg-red-700 text-white ">Ignore Notification</button>
+            </div>:<h1></h1>}
+            </div>
+            <ToastContainer />
         </>
     )
 }
