@@ -14,6 +14,7 @@ function LoginDriver()
     const [busNumber,setBusNumber]=useState("")
     const [password,setPassword]=useState("")
     const [toggle,setToggle]=useState("password")
+    const [isLoading,setIsLoading]=useState(false)
     let {socket,busId,setBusId}=useContext(SocketContext)
     const {page,setPage}=useContext(PageContext)
 
@@ -34,6 +35,7 @@ function LoginDriver()
 
     async function loginDriver()
     {
+        setIsLoading(true)
         if(busNumber !== "" && password !== "")
         {
             let payload={
@@ -45,7 +47,7 @@ function LoginDriver()
 
             console.log(response)
 
-
+            setIsLoading(false)
             if(response.data.login === true)
             {
                 // navigate("/driver/login")
@@ -89,11 +91,13 @@ function LoginDriver()
                     </div> 
                     
                     <div className="flex flex-col items-center justify-center space-y-5">
-                        <h1 className="text-white text-xl">Want to register first ? <button onClick={changePage}  className="text-yellow-500 font-semibold text-xl">Register</button></h1>
+                        <h1 className="text-white ">Want to register first ? <button onClick={changePage}  className="text-yellow-500 font-semibold text-xl">Register</button></h1>
+                        {isLoading ? (
+                            <div className="animate-spin rounded-full h-6 w-6 border-t-4 border-b-4 border-l-3 border-r-3 border-yellow-500 mx-auto"></div>
+                        ) : (
                         <button className="px-12 py-2 rounded-xl font-bold text-1xl text-white bg-[#004D52] hover:text-gray-300" onClick={loginDriver}>Log in</button>
+                        )}   
                     </div>
-
-
                 </div>
                 <ToastContainer transition={Zoom} />
             </div>
