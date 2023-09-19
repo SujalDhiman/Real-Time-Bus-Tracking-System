@@ -7,7 +7,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Lexend']
+        'comic-neue': ['Comic Neue', 'sans']
       }
     },
   },
