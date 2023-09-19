@@ -16,10 +16,13 @@ import {axiosConfig, SERVER_URL} from "../../Constants/config.js";
 import { ToastContainer, Zoom, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { toastPayload } from "../../Context/Assets"
+import stopAudio from "./stop.mp4"
+
+
+
 const MemoizedDirectionsRenderer = React.memo(({ directions }) => (
     <DirectionsRenderer options={{ directions: directions }} />
 ));
-
 
 const MemoizedDirectionsService = React.memo(({ directionsOptions, setDirectionsResponse }) => (
     <DirectionsService options={directionsOptions} callback={(response) => {
@@ -36,6 +39,7 @@ const MemoizedDirectionsService = React.memo(({ directionsOptions, setDirections
 
 function Map()
 {
+    let emergencyaudio=new Audio(stopAudio) 
     const {socket} = useContext(SocketContext);
     const {id}=useParams()
     const [latitude,setLatitude]=useState(0)
@@ -49,6 +53,7 @@ function Map()
     const [directionsResponse, setDirectionsResponse] = useState(null);
     const [directionsOptions, setDirectionsOptions] = useState();
     const [progress, setProgress] = useState();
+    const [audio,setAudio]=useState(null)
 
     useEffect(() => {
         socket.on(`busLocation-${id}`,(payload)=>{
@@ -67,6 +72,9 @@ function Map()
                 theme:"dark"
             })
             setPanicDetails({...panicDetails,alertId:`${payload.id}`,alertLatitude:`${payload.latitude}`,alertLongitude:`${payload.longitude}`,alertSignal:true})
+            
+            emergencyaudio.play()
+            setAudio(emergencyaudio)
         })
     },[])
 
@@ -125,6 +133,12 @@ function Map()
                 <h1>Alert Latitude :- {panicDetails.alertLatitude} </h1>
                 <h1>Alert Longitude :- {panicDetails.alertLongitude}</h1>
                 <button onClick={()=>{
+                    if(audio)
+                    {
+                        console.log(audio)
+                        audio.pause()
+                        setAudio(null)
+                    }
                     setPanicDetails({...panicDetails,alertSignal:false})
                 }} className="bg-red-700 text-white ">Ignore Notification</button>
             </div>:<h1></h1>}
