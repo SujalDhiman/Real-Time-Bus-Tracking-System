@@ -150,7 +150,12 @@ function Map()
             });
         })
         //console.log(progress);
-        setProgress(updateProgress);
+
+        if(updateProgress.every((entry) => {entry.reached}))
+            setProgress(undefined);
+        else
+            setProgress(updateProgress);
+
         localStorage.setItem("progress",JSON.stringify( progress));
     }, [distanceResponse])
 
