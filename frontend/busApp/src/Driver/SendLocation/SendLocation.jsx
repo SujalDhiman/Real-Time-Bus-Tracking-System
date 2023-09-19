@@ -121,8 +121,8 @@ function Map()
 
     useEffect(() => {
         //Only emitting when there is a change in position
-        socket.emit(`busId`,{latitude: differedLatitude, longitude: differedLongitude,id, progress: progress})
-        console.log(differedLatitude, differedLongitude);
+        socket.emit(`busId`,{latitude: differedLatitude, longitude: differedLongitude, progress: progress, id})
+        console.log(differedLatitude, differedLongitude, progress);
 
         if(distanceOptions)
             setDistanceOptions((distanceOptions) => {distanceOptions.origins = [`${latitude} ${longitude}`]

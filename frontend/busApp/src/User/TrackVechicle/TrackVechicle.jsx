@@ -51,6 +51,7 @@ function Map()
             setLongitude(payload.longitude)
             setProgress(payload.progress)}
         )
+            console.log(progress);
     }, [])
 
     useEffect(()=> {
