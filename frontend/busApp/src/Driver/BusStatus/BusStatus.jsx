@@ -1,10 +1,11 @@
 import {useCallback, useEffect, useState} from "react"
-import { useNavigate, useParams } from "react-router-dom"
+import {Link, useNavigate, useParams} from "react-router-dom"
 import axios from "axios"
 import {axiosConfig, SERVER_URL} from "../../Constants/config"
 import { toast,ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { toastPayload } from "../../Context/Assets";
+import './BusStatusStyles.css';
 
 function BusStatus()
 {
@@ -16,12 +17,9 @@ function BusStatus()
     const [route, setRoute]=useState("")
     const [busRoutes, setBusRoutes]=useState([]);
 
-    const changeStatus=useCallback(function (e)
+    const changeStatus=useCallback(function ()
     {
-        if(e.target.id === "a")
-            setStatus("active")
-        else
-            setStatus("notactive")
+        setStatus((status === "active")?"notactive":"active");
     },[status])
 
     useEffect(() => {
@@ -54,18 +52,26 @@ function BusStatus()
     }
 
     return (
-        <>
+        <div className={"absolute top-0 left-0 bg-white w-full h-full"}>
+            <div className="top-0 left-0 bg-[#E80202] h-[50px] flex items-center justify-center space-x-20 text-white text-3xl">
+                <Link to="/driver/dashboard">Home</Link>
+                <Link to={`../driver/sendLocation/${id}`}>Monitor Location</Link>
+                <Link to={`../driver/setStatus/${id}`}>Update Status</Link>
+            </div>
             <div className="mt-10 flex flex-col justify-center items-center">
                 <h1 className="text-white text-3xl font-bold text-center">Bus Details</h1>
-                <div className="rounded-lg bg-gray-700 w-[500px] flex flex-col justify-center items-center space-y-14">
+                <div className="rounded-lg bg-[#E93F4B] w-[500px] h-[500px] flex flex-col justify-center items-center space-y-14">
     
-                    <input type="text" value={name}  onChange={(e)=>setName(e.target.value)} placeholder="Enter Name"/>
-    
-                    <div>
-                        <h1>Bus Status :- {status.toUpperCase()}</h1>
-                        <button id="a" onClick={changeStatus}  className="px-2 py-2 bg-blue-600 text-white">Active</button>
-                        <button id="na" onClick={changeStatus} className="px-2 py-2 bg-blue-600 text-white">Not Active</button>
+                    <div className={" flex mt-[-35%] ml-[60%] gap-[5px]"}>
+                        <h1>Status </h1>
+                        <label htmlFor="toggle-example" className="flex items-center cursor-pointer relative mb-4">
+                            <input type="checkbox" id="toggle-example" className="sr-only" onClick={changeStatus}/>
+                                <div
+                                    className="toggle-bg bg-[#FAD1D4] border-2 border-[#FAD1D4] h-6 w-[60px] rounded-full"></div>
+                        </label>
                     </div>
+                    <input type="text" value={name}  onChange={(e)=>setName(e.target.value)} placeholder="Enter Name"/>
+
 
                     <select value={route} onChange={(e) => setRoute(e.target.value)}>
                         <option>Select Route</option>
@@ -90,7 +96,7 @@ function BusStatus()
                 </div>
             </div>
             <ToastContainer />
-        </>
+        </div>
         )
 }
 
