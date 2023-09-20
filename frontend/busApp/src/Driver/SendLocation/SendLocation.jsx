@@ -231,12 +231,12 @@ function SendLocation()
     if(!isLoaded) return <h1 className="text-white">wait plz</h1>
     else
     return (
-    <>
+    <div className={"overflow"}>
         <div>
             {/* <TrackVechicle/> */}
         </div>
         <Map className="mt-10"/>
-    </>
+    </div>
     )
 }
 

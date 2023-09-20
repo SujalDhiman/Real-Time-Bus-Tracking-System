@@ -1,15 +1,16 @@
 .map-container
 {
     margin-top: 1%;
-    left: 9%;
+    left: 3%;
     width: 80%;
     height:65vh;
+
 }
 
 #pause{
     margin-left: 37%;
     margin-top: 5%;
-    margin-bottom: 2%;
+    /*margin-bottom: 2%;*/
     background-color: #fde047;
     border-radius: 20px;
     border: 1px solid #fde047;
@@ -19,7 +20,7 @@
     font-weight: bold;
     color: #000000;
     cursor: pointer;
-    
+
 }
 
 #start{

@@ -20,7 +20,7 @@ function ChatBot(){
 function TypeOfUser()
 {
     return (
-        <div className={"fixed top-0 left-0 col-auto justify-center items-center h-full w-full"}>
+        <div className={"fixed top-0 left-0 col-auto justify-center items-center h-full w-full object-cover"}>
             <img src={main} className={"fixed top-0 left-0 w-full h-full z-[-1] blur-sm brightness-90 contrast-60 saturate-6"}/>
                 <h1 className={"fixed text-[45px] top-[40px] w-full text-white text-4xl text-center drop-shadow-lg"}>Choose Your Session</h1>
                 <div className={"flex row justify-center w-full h-full items-center z-10"}>

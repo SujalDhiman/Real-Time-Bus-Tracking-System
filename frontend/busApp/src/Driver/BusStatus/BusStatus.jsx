@@ -62,7 +62,7 @@ function BusStatus()
                 <div className="rounded-[40px] bg-[#E93F4B] w-[500px] h-[500px] flex flex-col justify-center items-center gap-[50px]">
     
                     <div className={" flex mt-[-20%] ml-[60%] gap-[5px]"}>
-                        <h1>Status </h1>
+                        <h1 className={"text-white"}>Status </h1>
                         <label htmlFor="toggle-example" className="flex items-center cursor-pointer relative mb-4">
                             <input type="checkbox" id="toggle-example" className="sr-only" onClick={changeStatus}/>
                                 <div

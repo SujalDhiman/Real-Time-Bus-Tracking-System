@@ -82,7 +82,7 @@ function BusDashboard()
     },[])
 
     return (
-        <div className={"absolute top-0 left-0 bg-white w-full h-full overflow-clip"}>
+        <div className={"absolute top-0 left-0 bg-white w-full h-full overflow-hidden"}>
             <div className=" z-50 fixed w-full top-0 left-0 bg-[#E80202] h-[60px] flex items-center justify-center space-x-80 text-white text-3xl">
                 <Link to="/driver/dashboard"><span className={"font-bold"}>Home</span></Link>
                 <Link to={`/driver/sendLocation/${busId}`}>Monitor Location</Link>
@@ -116,12 +116,12 @@ function BusDashboard()
                             </a>
                             <a href="#" className="relative">
                                 <div className="h-48 flex flex-wrap content-center">
-                                    <img src={imageUrl} className="mx-auto  h-[200px]" alt=""/>
+                                    <img src={imageUrl} className="mx-auto  h-[180px]" alt=""/>
                                 </div>
                             </a>
                         </div>
                     </div>
-                    <Map busRoute={busRoute} className="mt-[20px] w-[90%] "/>
+                    <Map busRoute={busRoute} className=" mt-[20px] w-[90%] "/>
                 </div>
             </div>
         </div>
