@@ -94,8 +94,8 @@ function Map()
             }
         )
         console.log("here");
-        if(localStorage.getItem("progress") !== null && localStorage.getItem("progress") !== "undefined") {
-            setProgress(JSON.parse(localStorage.getItem("progress")));
+        if(sessionStorage.getItem("progress") !== null && sessionStorage.getItem("progress") !== "undefined") {
+            setProgress(JSON.parse(sessionStorage.getItem("progress")));
         }
     }, [])
 
@@ -163,7 +163,7 @@ function Map()
         else
             setProgress(updateProgress);
 
-        localStorage.setItem("progress",JSON.stringify( progress));
+        sessionStorage.setItem("progress",JSON.stringify( progress));
     }, [distanceResponse])
 
     //function to pause  and resume GPS
