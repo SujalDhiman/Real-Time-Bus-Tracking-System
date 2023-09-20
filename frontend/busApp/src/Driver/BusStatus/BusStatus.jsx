@@ -59,10 +59,9 @@ function BusStatus()
                 <Link to={`../driver/setStatus/${id}`}>Update Status</Link>
             </div>
             <div className="mt-10 flex flex-col justify-center items-center">
-                <h1 className="text-white text-3xl font-bold text-center">Bus Details</h1>
-                <div className="rounded-lg bg-[#E93F4B] w-[500px] h-[500px] flex flex-col justify-center items-center space-y-14">
+                <div className="rounded-[40px] bg-[#E93F4B] w-[500px] h-[500px] flex flex-col justify-center items-center gap-[50px]">
     
-                    <div className={" flex mt-[-35%] ml-[60%] gap-[5px]"}>
+                    <div className={" flex mt-[-20%] ml-[60%] gap-[5px]"}>
                         <h1>Status </h1>
                         <label htmlFor="toggle-example" className="flex items-center cursor-pointer relative mb-4">
                             <input type="checkbox" id="toggle-example" className="sr-only" onClick={changeStatus}/>
@@ -70,10 +69,10 @@ function BusStatus()
                                     className="toggle-bg bg-[#FAD1D4] border-2 border-[#FAD1D4] h-6 w-[60px] rounded-full"></div>
                         </label>
                     </div>
-                    <input type="text" value={name}  onChange={(e)=>setName(e.target.value)} placeholder="Enter Name"/>
+                    <input className={"text-black w-[70%] h-[40px] rounded-[12px] p-3"} type="text" value={name}  onChange={(e)=>setName(e.target.value)} placeholder="Name"/>
 
 
-                    <select value={route} onChange={(e) => setRoute(e.target.value)}>
+                    <select className={"w-[70%] h-[40px] rounded-[12px] p-2"} value={route} onChange={(e) => setRoute(e.target.value)}>
                         <option>Select Route</option>
                         {
                             (() => {
@@ -91,7 +90,7 @@ function BusStatus()
 
                     {/*<input type="text" value={destinationPoint}  onChange={(e)=>setDestinationPoint(e.target.value)} placeholder="Enter Destination Point"/>*/}
 
-                    <button onClick={submitDetails}>Set Details</button>
+                    <button className={"absolute mt-[22%] w-[150px] h-[40px] border-2 rounded-[12px] bg-[#E01A27] text-white"} onClick={submitDetails}>Set Details</button>
                     
                 </div>
             </div>
