@@ -20,6 +20,8 @@ import stopAudio from "./stop.mp4"
 
 
 
+
+
 const MemoizedDirectionsRenderer = React.memo(({ directions }) => (
     <DirectionsRenderer options={{ directions: directions }} />
 ));
@@ -36,34 +38,30 @@ const MemoizedDirectionsService = React.memo(({ directionsOptions, setDirections
     }}/>
 ));
 
-
-function Map({busDetails})
+function PanicButton({busDetails})
 {
-    let emergencyaudio=new Audio(stopAudio) 
-    const {socket} = useContext(SocketContext);
     const {id}=useParams()
-    const [latitude,setLatitude]=useState(0)
-    const [longitude,setLongitude]=useState(0)
+    let [latitude,setLatitude]=useState(0)
+    let [longitude,setLongitude]=useState(0)
+    let emergencyaudio=new Audio(stopAudio)
+    const {socket} = useContext(SocketContext);
     const [panicDetails,setPanicDetails]=useState({
         alertId:"",
         alertLatitude:"",
         alertLongitude:"",
         alertSignal:false
-    })
-    const [directionsResponse, setDirectionsResponse] = useState(null);
-    const [directionsOptions, setDirectionsOptions] = useState();
-    const [progress, setProgress] = useState();
+    }) 
     const [audio,setAudio]=useState(null)
 
-    useEffect(() => {
-        socket.on(`busLocation-${id}`,(payload)=>{
-            setLatitude(payload.latitude)
-            setLongitude(payload.longitude)
-            setProgress(payload.progress)}
-        )
-    }, [])
+    //listening for coordinates
+    useEffect(()=>{
+    navigator.geolocation.getCurrentPosition((position)=>{
+        setLatitude(position.coords.latitude)
+        setLongitude(position.coords.longitude)
+    })},[latitude,longitude])
 
-    //listening for panic alarm
+
+    //listening for PANIC ALARM
     useEffect(()=>{
         socket.on("sendAlarm",(payload)=>{
             toast.warn("An Emergency Occured",{
@@ -78,29 +76,10 @@ function Map({busDetails})
         })
     },[])
 
-
-
-    useEffect(()=> {
-        (async () => {
-            const route = await axios.get(`${SERVER_URL}/api/v1/activeBus/${id}`, axiosConfig);
-            const waypoints = [];
-            route.data.bus.route.stations.map((station) => {
-                waypoints.push({"location": `${station.position[0]} ${station.position[1]}`, "stopover": true});
-            });
-
-
-            const directionsOptions = {
-                destination: waypoints[waypoints.length-1].location ,
-                origin: waypoints[0].location,
-                waypoints: waypoints,
-                travelMode: 'DRIVING',
-            };
-            setDirectionsOptions(directionsOptions);
-        })();
-    },[])
-
+    //sending the EVENT
     async function panic()
     {
+        console.log("pressed")
         let payload={
             id,
             latitude,
@@ -123,6 +102,69 @@ function Map({busDetails})
 
     }
 
+    return (<>
+    <div className="mt-10">
+                <button className="w-20 h-20 border-2 border-red-600 bg-red-600 rounded-full text-white hover:text-gray-400" onClick={panic} >PANIC</button>
+    </div>
+    <div className="flex flex-col items-center justify-center">
+    {panicDetails.alertSignal === true ? <div className="w-[400px] h-[100px] border-2 bg-black text-white">
+        <h1>Bus ID :-{panicDetails.alertId}</h1>
+        <h1>Alert Latitude :- {panicDetails.alertLatitude} </h1>
+        <h1>Alert Longitude :- {panicDetails.alertLongitude}</h1>
+        <button onClick={()=>{
+            if(audio)
+            {
+                console.log(audio)
+                audio.pause()
+                setAudio(null)
+            }
+            setPanicDetails({...panicDetails,alertSignal:false})
+        }} className="bg-red-700 text-white ">Ignore Notification</button>
+    </div>:<h1></h1>}
+    <ToastContainer />
+    </div>
+    </>
+    )
+}
+
+
+function Map()
+{
+    const {socket} = useContext(SocketContext);
+    const {id}=useParams()
+    const [latitude,setLatitude]=useState(0)
+    const [longitude,setLongitude]=useState(0)
+    const [directionsResponse, setDirectionsResponse] = useState(null);
+    const [directionsOptions, setDirectionsOptions] = useState();
+    const [progress, setProgress] = useState();
+
+    useEffect(() => {
+        socket.on(`busLocation-${id}`,(payload)=>{
+            setLatitude(payload.latitude)
+            setLongitude(payload.longitude)
+            setProgress(payload.progress)}
+        )
+    }, [])
+
+    useEffect(()=> {
+        (async () => {
+            const route = await axios.get(`${SERVER_URL}/api/v1/activeBus/${id}`, axiosConfig);
+            const waypoints = [];
+            route.data.bus.route.stations.map((station) => {
+                waypoints.push({"location": `${station.position[0]} ${station.position[1]}`, "stopover": true});
+            });
+
+
+            const directionsOptions = {
+                destination: waypoints[waypoints.length-1].location ,
+                origin: waypoints[0].location,
+                waypoints: waypoints,
+                travelMode: 'DRIVING',
+            };
+            setDirectionsOptions(directionsOptions);
+        })();
+    },[])
+
     return (
         <>
         <div><h1 className="text-white">latitude :{latitude}  longitude : {longitude} </h1></div>
@@ -138,31 +180,9 @@ function Map({busDetails})
                 {progress && progress.map((p) => {return (<li className={p.reached?"text-white":"text-red-700"}>{`* - ${p.distance} ${p.eta}`}</li>)})}
             </ul>
 
-            <div className="mt-10">
-                <button className="w-20 h-20 border-2 border-red-600 bg-red-600 rounded-full text-white hover:text-gray-400" onClick={panic} >PANIC</button>
-            </div>
-            <div className="flex flex-col items-center justify-center">
-            {panicDetails.alertSignal === true ? <div className="w-[400px] h-[100px] border-2 bg-black text-white">
-                <h1>Bus ID :-{panicDetails.alertId}</h1>
-                <h1>Alert Latitude :- {panicDetails.alertLatitude} </h1>
-                <h1>Alert Longitude :- {panicDetails.alertLongitude}</h1>
-                <button onClick={()=>{
-                    if(audio)
-                    {
-                        console.log(audio)
-                        audio.pause()
-                        setAudio(null)
-                    }
-                    setPanicDetails({...panicDetails,alertSignal:false})
-                }} className="bg-red-700 text-white ">Ignore Notification</button>
-            </div>:<h1></h1>}
-            </div>
-            <ToastContainer />
         </>
     )
 }
-
-
 
 function Card({busNumber,busNumberPlate,contactInfo,route,age,name,busStatus})
 {
@@ -185,7 +205,6 @@ function Card({busNumber,busNumberPlate,contactInfo,route,age,name,busStatus})
 
 export function TrackVechicle()
 {
-
     const {isLoaded}=useLoadScript({
         googleMapsApiKey: MAPS_KEY
     })
@@ -213,10 +232,11 @@ export function TrackVechicle()
     {
         return (
             <>
+            <Map/>
             <div className="space-y-16">
-            {isLoading?<h1> Loading... </h1>:<Card busNumber={dataReceived.busNumber} busNumberPlate={dataReceived.busNumberPlate} contactInfo={dataReceived.driver.contactInfo} route={dataReceived.route} age={dataReceived.driver.age} name={dataReceived.driver.name} busStatus={dataReceived.busStatus} key={dataReceived._id} objectId={dataReceived._id}/>}
+            {isLoading ?<h1> Loading... </h1>:<Card key={dataReceived._id} busNumber={dataReceived.busNumber} busNumberPlate={dataReceived.busNumberPlate} contactInfo={dataReceived.driver.contactInfo} route={dataReceived.route} age={dataReceived.driver.age} name={dataReceived.driver.name} busStatus={dataReceived.busStatus}  objectId={dataReceived._id}/>}
             </div>
-            <Map busDetails={dataReceived}/>
+            <PanicButton  busDetails={dataReceived}/>
             </>
         )
     }
