@@ -9,7 +9,7 @@ import {
 } from "@react-google-maps/api"
 import "./SendLocation.css"
 import { SocketContext } from "../../Context/SocketContext"
-import {Link, useParams } from "react-router-dom"
+import {Link, useNavigate, useParams } from "react-router-dom"
 import {MAPS_KEY} from "../../Constants/keys.js";
 import axios from "axios";
 import {axiosConfig, SERVER_URL} from "../../Constants/config.js";
@@ -41,6 +41,8 @@ export function Map()
 {
     const {socket} =useContext(SocketContext)
 
+    let navigate=useNavigate()
+
     const [latitude,setLatitude]=useState(0);
     const [longitude,setLongitude]=useState(0);
     const [busRoute, setBusRoute]=useState();
@@ -59,6 +61,8 @@ export function Map()
     const [distanceResponse, setDistanceResponse] = useState();
     const [progress, setProgress] = useState();
 
+    //State Variables For Toggle Buttons
+    const [toggle,setToggle]=useState("pause")
 
     const {id}=useParams()
 
@@ -173,15 +177,17 @@ export function Map()
         {
             navigator.geolocation.clearWatch(stopGPS)
             setStopGPS(0)
+            setToggle("resume")
+        }
+        else if (e.target.id === "resume")
+        {
+            setLatitude(0)
+            setLongitude(0)
+            setToggle("pause")
         }
         else
         {
-            // navigator.geolocation.getCurrentPosition((position)=>{
-            //     setLatitude(position.coords.latitude)
-            //     setLongitude(position.coords.longitude)
-            // })
-            setLatitude(0)
-            setLongitude(0)
+            navigate("/driver/dashboard")
         }
     }
 
@@ -206,13 +212,11 @@ export function Map()
                 {progress && progress.map((p) => {return (<li className={p.reached?"text-white":"text-red-700"}>{`* - ${p.distance} ${p.eta}`}</li>)})}
             </ul>
             <div><h1 className="mt-4 ml-2 text-black">latitude :{differedLatitude}  longitude : {differedLongitude} </h1></div>
-            <div className="flex space-x-10">
-                <button className="mt-10 h-20 w-24 border-2 border-yellow-300 text-black rounded-full bg-yellow-500" onClick={monitorStatus} id="pause">
-                    Pause
+            <div className="flex fixed space-x-10">
+                <button className={`mt-10 h-20 w-24 border-2 ${ toggle === "pause" ?"border-yellow-300 text-red-500 rounded-full bg-yellow-500":"border-green-700 text-white rounded-full bg-green-700"}`} onClick={monitorStatus} id={toggle}>
+                    {toggle.toUpperCase()}
                 </button>
-                <button className="mt-10 h-20 w-24 border-2 border-green-500 text-black rounded-full bg-green-500" onClick={monitorStatus} id="start">
-                    Resume
-                </button>
+                
                 <button className="mt-10 h-20 w-24 border-2 border-red-700 text-black rounded-full bg-red-500" onClick={monitorStatus} id="stop">
                     Stop
                 </button>
