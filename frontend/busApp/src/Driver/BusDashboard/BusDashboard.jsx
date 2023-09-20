@@ -110,11 +110,11 @@ function BusDashboard()
                     <div className=" absolute flex left-[91%] text-[20px]"><span className={"mt-[-8px]"}>Status :</span> &nbsp; {busStatus === "active"?<h1 className="w-[20px] h-[20px] rounded-full bg-green-600"></h1>:<h1 className="w-[20px] h-[20px]rounded-full bg-red-600"></h1>}</div>
                     <div className="bg-gray-300 h-[220px] w-full flex flex-row items-center pl-4">
                         <div className="relative ">
-                            <a className="absolute inset-0 z-10 bg-white text-center flex flex-col items-center justify-center opacity-0 hover:opacity-100 bg-opacity-90 duration-300">
+                            <a href={imageUrl} target={"_blank"} className="absolute inset-0 z-10 bg-white text-center flex flex-col items-center justify-center opacity-0 hover:opacity-100 bg-opacity-90 duration-300">
                                 <h1 className="tracking-wider font-bold">PUC</h1>
                                 <p className="mx-auto">Pollution Papers</p>
                             </a>
-                            <a href="#" className="relative">
+                            <a href={imageUrl} className="relative">
                                 <div className="h-48 flex flex-wrap content-center">
                                     <img src={imageUrl} className="mx-auto  h-[180px]" alt=""/>
                                 </div>
