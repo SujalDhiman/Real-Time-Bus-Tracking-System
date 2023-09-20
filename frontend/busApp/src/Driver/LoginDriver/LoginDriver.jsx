@@ -75,13 +75,17 @@ function LoginDriver()
             <div className="flex flex-col mt-5 h-[100vh] rounded-lg items-center justify-center">
                 <div className="rounded-lg  flex flex-col space-y-[4vh]">
 
-                <div className="flex bg-white border border-black w-[290px] h-[50px] justify-between items-center rounded-lg p-2 shadow-xl">
-                    <input type="text" className="placeholder-black focus:outline-none" value={busNumber} onChange={(e) => setBusNumber(e.target.value)} placeholder="Bus Number"/>
+                <div className="flex bg-white border border-black w-[290px] h-[50px] justify-between items-center rounded-lg p-2 shadow-xl relative group">
+                    <input type="text" id="busNumber" className="placeholder-black focus:outline-none" value={busNumber} onChange={(e) => setBusNumber(e.target.value)}/>
+                    {busNumber==""?(
+                <label for="busNumber" class="ml-[8px] transform transition-all absolute top-0 left-0 h-full flex items-center pl-2 text-lg group-focus-within:text-xs peer-valid:text-xs group-focus-within:h-1/2 peer-valid:h-1/2 group-focus-within:-translate-y-[2px] peer-valid:-translate-y-full group-focus-within:pl-0 peer-valid:pl-0">Bus Number</label>):(<label for="busNumber" className="hidden">Bus Number</label>)}
                     <BusNumberSVG />
                 </div>
                     
-                <div className="flex bg-white border border-black w-[290px] h-[50px] justify-between items-center rounded-lg p-2 shadow-xl">
-                    <input type={toggle} value={password}  className="placeholder-black focus:outline-none" onChange={(e)=>setPassword(e.target.value)} placeholder="Password"/>
+                <div className="flex bg-white border border-black w-[290px] h-[50px] justify-between items-center rounded-lg p-2 shadow-xl relative group">
+                    <input type={toggle} id="password" value={password}  className="placeholder-black focus:outline-none" onChange={(e)=>setPassword(e.target.value)}/>
+                    {password==""?(
+                <label for="password" class="ml-[8px] transform transition-all absolute top-0 left-0 h-full flex items-center pl-2 text-lg group-focus-within:text-xs peer-valid:text-xs group-focus-within:h-1/2 peer-valid:h-1/2 group-focus-within:-translate-y-[2px] peer-valid:-translate-y-full group-focus-within:pl-0 peer-valid:pl-0">Password</label>):(<label for="busNumber" className="hidden">Password</label>)}
                     <button onClick={viewPassword} className="">{toggle === "password"? <PasswordSVG />:<HidePasswordSVG />}</button>
                 </div>
                     
