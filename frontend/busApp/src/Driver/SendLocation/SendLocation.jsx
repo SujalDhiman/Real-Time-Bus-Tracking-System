@@ -9,7 +9,7 @@ import {
 } from "@react-google-maps/api"
 import "./SendLocation.css"
 import { SocketContext } from "../../Context/SocketContext"
-import { useParams } from "react-router-dom"
+import {Link, useParams } from "react-router-dom"
 import {MAPS_KEY} from "../../Constants/keys.js";
 import axios from "axios";
 import {axiosConfig, SERVER_URL} from "../../Constants/config.js";
@@ -187,7 +187,11 @@ function Map()
 
     return (
         <>
-        <div><h1 className="text-white">latitude :{differedLatitude}  longitude : {differedLongitude} </h1></div>
+        <div className="top-0 left-0 bg-[#E80202] h-[50px] flex items-center justify-center space-x-20 text-white text-3xl">
+                <span class=""><Link to="/driver/dashboard">Home</Link></span>
+                <span class=""><Link to={`../driver/sendLocation/${id}`}>Monitor Location</Link></span>
+                <span class=""><Link to={`../driver/setStatus/${id}`}>Update Status</Link></span>
+            </div>
             <GoogleMap zoom={10} center={{lat:differedLatitude,lng:differedLongitude}} mapContainerClassName="map-container">
                 { directionsOptions && <MemoizedDirectionsService directionsOptions={directionsOptions} setDirectionsResponse={setDirectionsResponse}/>}
                 {directionsResponse && <>
@@ -201,13 +205,16 @@ function Map()
             <ul>
                 {progress && progress.map((p) => {return (<li className={p.reached?"text-white":"text-red-700"}>{`* - ${p.distance} ${p.eta}`}</li>)})}
             </ul>
-
+            <div><h1 className="mt-4 ml-2 text-black">latitude :{differedLatitude}  longitude : {differedLongitude} </h1></div>
             <div className="flex space-x-10">
-                <button className="mt-10 h-20 w-20 border-2 border-yellow-300 text-black rounded-full bg-yellow-500" onClick={monitorStatus} id="pause">
-                    Stop
+                <button className="mt-10 h-20 w-24 border-2 border-yellow-300 text-black rounded-full bg-yellow-500" onClick={monitorStatus} id="pause">
+                    Pause
                 </button>
-                <button className="mt-10 h-20 w-20 border-2 border-green-500 text-black rounded-full bg-green-500" onClick={monitorStatus} id="start">
+                <button className="mt-10 h-20 w-24 border-2 border-green-500 text-black rounded-full bg-green-500" onClick={monitorStatus} id="start">
                     Resume
+                </button>
+                <button className="mt-10 h-20 w-24 border-2 border-red-700 text-black rounded-full bg-red-500" onClick={monitorStatus} id="stop">
+                    Stop
                 </button>
             </div>
         </>
