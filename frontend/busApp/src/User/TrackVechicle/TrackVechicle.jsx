@@ -12,7 +12,7 @@ import {
 import { SocketContext } from "../../Context/SocketContext"
 import "./TrackVechicle.css"
 import {MAPS_KEY} from "../../Constants/keys.js";
-import {axiosConfig, SERVER_URL} from "../../Constants/config.js";
+import {adminAddress, axiosConfig, SERVER_URL} from "../../Constants/config.js";
 import { ToastContainer, Zoom, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { toastPayload } from "../../Context/Assets"
@@ -37,7 +37,7 @@ const MemoizedDirectionsService = React.memo(({ directionsOptions, setDirections
 ));
 
 
-function Map()
+function Map({busDetails})
 {
     let emergencyaudio=new Audio(stopAudio) 
     const {socket} = useContext(SocketContext);
@@ -99,14 +99,28 @@ function Map()
         })();
     },[])
 
-    function panic()
+    async function panic()
     {
         let payload={
             id,
             latitude,
             longitude
         }
-        socket.emit("panicAlarm",payload)
+        socket.emit("panicAlarm",payload);
+
+        const sosPayload = {
+            "recipientAddress": adminAddress,
+            "subject": "SOS",
+            "message": `Emergency on BusNumber ${busDetails.busNumber} on route: ${busDetails.route.routeName}
+            Driver Name: ${busDetails.driver.name},
+            Driver Contact: ${busDetails.driver.contactInfo},
+            Live Location: http://localhost:5173/bus-real#/user/trackVehicle/6507b12bb75297ebd9110f8b
+            `
+        }
+
+        const response= await axios.post(`https://sos-message.azurewebsites.net/api/sos-mail?code=_kVVzKkAx9GlalN6MWe7l9QGTMsRH9MKckEB5_ysjPzgAzFucyZDmg==`,sosPayload);
+        console.log(response);
+
     }
 
     return (
@@ -202,7 +216,7 @@ export function TrackVechicle()
             <div className="space-y-16">
             {isLoading?<h1> Loading... </h1>:<Card busNumber={dataReceived.busNumber} busNumberPlate={dataReceived.busNumberPlate} contactInfo={dataReceived.driver.contactInfo} route={dataReceived.route} age={dataReceived.driver.age} name={dataReceived.driver.name} busStatus={dataReceived.busStatus} key={dataReceived._id} objectId={dataReceived._id}/>}
             </div>
-            <Map />
+            <Map busDetails={dataReceived}/>
             </>
         )
     }
