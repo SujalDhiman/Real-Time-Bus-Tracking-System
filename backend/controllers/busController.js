@@ -2,6 +2,7 @@ const busSchema=require("../model/busModel.js")
 const routeSchema = require("../model/routeModel.js")
 const stationSchema = require("../model/stationModel.js");
 const cloudinary=require("cloudinary")
+const feedbackSchema=require("../model/feedbackModel.js")
 
 exports.register=async function(req,res)
 {
@@ -92,7 +93,6 @@ exports.login=async function (req,res)
     }
 }
 
-
 exports.activeBus=async function(req,res)
 {
     const allActiveBuses=await busSchema.find({busStatus:"active"}).populate({
@@ -172,4 +172,60 @@ exports.busRoutes = async function(req, res) {
         success: true,
         routes: allRoutes
     });
+}
+
+exports.getFeedBack=async function(req,res){
+
+    const {busNumber,ratings,comments}=req.body
+    if(busNumber === "" && comments === "")
+    {
+        res.status(200).json({
+            feedback:false
+        })
+    }
+    else
+    {
+        const feed=await feedbackSchema.create({...req.body})
+        res.status(200).json({
+            success:true,
+            feed
+        })
+    }}
+
+exports.allFeedBack=async function(req,res){
+
+    const allFeeds=await feedbackSchema.find()
+
+    if(allFeeds.length === 0)
+    {
+        res.status(200).json({
+            message:"No feedbacks for now"
+        })
+    }
+    else
+    {
+        res.status(200).json({
+            success:true,
+            allFeeds
+        })
+    }
+}
+
+exports.searchFeedBack=async function(req,res){
+
+    //grabbing bus number from body
+    const {busNumber}=req.body
+
+    const busFeed=await feedbackSchema.find({busNumber})
+
+    let rating=busFeed.reduce((initial,item)=>initial+Number(item.ratings),0)
+
+    console.log(rating/busFeed.length)
+
+    console.log(busFeed)
+
+    res.status(200).json({
+        success:true,
+        busFeed
+    })
 }
