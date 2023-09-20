@@ -53,10 +53,10 @@ function BusStatus()
 
     return (
         <div className={"absolute top-0 left-0 bg-white w-full h-full"}>
-            <div className="top-0 left-0 bg-[#E80202] h-[50px] flex items-center justify-center space-x-20 text-white text-3xl">
+            <div className="top-0 left-0 bg-[#E80202] h-[60px] flex items-center justify-center space-x-80 text-white text-3xl">
                 <Link to="/driver/dashboard">Home</Link>
                 <Link to={`../driver/sendLocation/${id}`}>Monitor Location</Link>
-                <Link to={`../driver/setStatus/${id}`}>Update Status</Link>
+                <Link to={`../driver/setStatus/${id}`}><span className={"font-bold"}>Update Status</span></Link>
             </div>
             <div className="mt-10 flex flex-col justify-center items-center">
                 <div className="rounded-[40px] bg-[#E93F4B] w-[500px] h-[500px] flex flex-col justify-center items-center gap-[50px]">
