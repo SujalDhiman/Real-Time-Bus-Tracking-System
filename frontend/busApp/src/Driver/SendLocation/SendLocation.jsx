@@ -187,9 +187,9 @@ export function Map()
 
     return (
         <>
-        <div className="top-0 left-0 bg-[#E80202] h-[50px] flex items-center justify-center space-x-20 text-white text-3xl">
-                <span class=""><Link to="/driver/dashboard">Home</Link></span>
-                <span class=""><Link to={`../driver/sendLocation/${id}`}>Monitor Location</Link></span>
+        <div className="top-0 left-0 bg-[#E80202] h-[60px] flex items-center justify-center space-x-80 text-white text-3xl">
+                <span class=""><Link to="../driver/dashboard">Home</Link></span>
+                <span class="font-bold"><Link to={`../driver/sendLocation/${id}`}>Monitor Location</Link></span>
                 <span class=""><Link to={`../driver/setStatus/${id}`}>Update Status</Link></span>
             </div>
             <GoogleMap zoom={10} center={{lat:differedLatitude,lng:differedLongitude}} mapContainerClassName="map-container">
