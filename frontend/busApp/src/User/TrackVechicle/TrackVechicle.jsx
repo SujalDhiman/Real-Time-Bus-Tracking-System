@@ -77,7 +77,7 @@ function PanicButton({busDetails})
     },[])
 
     //sending the EVENT
-    async function panic()
+    function panic()
     {
         console.log("pressed")
         let payload={
@@ -97,9 +97,7 @@ function PanicButton({busDetails})
             `
         }
 
-        const response= await axios.post(`https://sos-message.azurewebsites.net/api/sos-mail?code=_kVVzKkAx9GlalN6MWe7l9QGTMsRH9MKckEB5_ysjPzgAzFucyZDmg==`,sosPayload);
-        console.log(response);
-
+        axios.post(`https://sos-message.azurewebsites.net/api/sos-mail?code=_kVVzKkAx9GlalN6MWe7l9QGTMsRH9MKckEB5_ysjPzgAzFucyZDmg==`,sosPayload).then((response) => console.log(response));
     }
 
     return (<>
