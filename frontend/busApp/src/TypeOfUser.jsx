@@ -1,11 +1,10 @@
 import {Link} from "react-router-dom";
 import chatBot from "./assets/chatBot.png";
 import main from "./assets/Register.jpg"
-import {LogoBus,LogoUser} from "./Context/Assets"
-
+import "./App.css"
 function ChatBot(){
     return  (
-     <df-messenger
+     <df-messenger id="test"
          intent="WELCOME"
          agent-id="d4bf08d1-af6b-47bc-af2d-953093470fab"
          language-code="en"
@@ -13,6 +12,7 @@ function ChatBot(){
          bot-writing-text="Just a minute"
          chat-title="NAMSKARAM-Vehicle Tracking Chatbot Assistant"
          chat-icon={chatBot}
+         df-messenger-button-titlebar-color="#e93f4b"
      ></df-messenger>
    )
 }
