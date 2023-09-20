@@ -1,8 +1,7 @@
 function Shimmer()
 {
     return (
-        <div className="w-[400px] h-[200px] animate-pulse bg-gray-800">
-
+        <div className="fixed top-0 left-0 w-[400px] h-full animate-pulse bg-[#A8151F]">
         </div>
     )
 }

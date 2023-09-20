@@ -14,11 +14,11 @@ import {MAPS_KEY} from "../../Constants/keys.js";
 import axios from "axios";
 import {axiosConfig, SERVER_URL} from "../../Constants/config.js";
 
-const MemoizedDirectionsRenderer = React.memo(({ directions }) => (
+export const MemoizedDirectionsRenderer = React.memo(({ directions }) => (
     <DirectionsRenderer options={{ directions: directions }} />
 ));
 
-const MemoizedDirectionsService = React.memo(({ directionsOptions, setDirectionsResponse }) => (
+export const MemoizedDirectionsService = React.memo(({ directionsOptions, setDirectionsResponse }) => (
     <DirectionsService options={directionsOptions} callback={(response) => {
         if (response !== null) {
             if (response.status === 'OK') {
@@ -37,7 +37,7 @@ const MemorizedDistanceService = React.memo(({ pos, distanceOptions, setDistance
     }}/>
 ));
 
-function Map()
+export function Map()
 {
     const {socket} =useContext(SocketContext)
 
