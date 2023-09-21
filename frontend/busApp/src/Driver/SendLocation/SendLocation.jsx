@@ -212,14 +212,18 @@ export function Map()
                 {progress && progress.map((p) => {return (<li className={p.reached?"text-white":"text-red-700"}>{`* - ${p.distance} ${p.eta}`}</li>)})}
             </ul>
             
-            <div className="mt-10 flex justify-evenly items-center h-20">
-                <button className={`${toggle === 'pause'? 'h-20 w-20 text-white font-bold': 'h-20 w-20 text-white font-bold'}  ${toggle === 'pause'? 'rounded-full bg-yellow-500': ' rounded-full bg-green-700'}`}  onClick={monitorStatus}  id={toggle}>
+            <div className="mt-10 flex justify-evenly items-center h-[100px]">
+                <button className={`h-20 w-20 focus:outline-none relative overflow-hidden transform transition-transform duration-100 hover:-translate-y-0.5 active:translate-y-0.5 active:scale-95 shadow-custom3${toggle === 'pause'? ' text-white font-bold': 'text-white font-bold'}  ${toggle === 'pause'? 'rounded-full bg-yellow-500': ' rounded-full bg-green-700'}`}  onClick={monitorStatus}  id={toggle}>
                     {toggle.toUpperCase()}
+                    <div className="absolute inset-0 flex items-center justify-center bg-opacity-0 bg-white hover:bg-opacity-30 transition-opacity duration-100 opacity-0 active:opacity-100">
+                </div>
                 </button>
                 
-                <button className="h-20 w-20 border-2  text-white font-bold rounded-full bg-red-700" onClick={monitorStatus} id="stop">
-                    STOP
-                </button>
+                <button
+                className="w-20 h-20 bg-red-700 border-2 border-red-700 rounded-full text-white focus:outline-none relative overflow-hidden transform transition-transform duration-100 hover:-translate-y-0.5 active:translate-y-0.5 active:bg-red-700 active:scale-95 shadow-custom3" onClick={monitorStatus} id="stop">STOP
+                <div className="absolute inset-0 flex items-center justify-center bg-opacity-0 bg-white hover:bg-opacity-30 transition-opacity duration-100 opacity-0 active:opacity-100">
+                </div>
+            </button>
             </div>
         </>
     )
