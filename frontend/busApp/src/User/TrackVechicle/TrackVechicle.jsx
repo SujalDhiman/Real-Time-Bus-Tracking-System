@@ -101,7 +101,7 @@ function PanicButton({busDetails})
     }
 
     return (<>
-    <div className="mt-10">
+    <div className="mt-10 ml-[70%]">
                 <button className="w-20 h-20 border-2 border-red-600 bg-red-600 rounded-full text-white hover:text-gray-400" onClick={panic} >PANIC</button>
     </div>
     <div className="flex flex-col items-center justify-center">
@@ -175,7 +175,9 @@ function Map()
                 <MarkerF position={{lat:latitude,lng:longitude}} />
             </GoogleMap>
             <ul>
-                {progress && progress.map((p) => {return (<li className={p.reached?"text-white":"text-red-700"}>{`* - ${p.distance} ${p.eta}`}</li>)})}
+                <div className={"absolute left-1 top-[80%]"}>
+                    {progress && progress.map((p) => {return (<li className={p.reached?"text-white":"text-red-700"}>{`* - ${p.distance} ${p.eta}`}</li>)})}
+                </div>
             </ul>
 
         </>
@@ -229,13 +231,17 @@ export function TrackVechicle()
     else
     {
         return (
-            <>
-            <Map/>
-            <div className="space-y-16">
-            {isLoading ?<h1> Loading... </h1>:<Card key={dataReceived._id} busNumber={dataReceived.busNumber} busNumberPlate={dataReceived.busNumberPlate} contactInfo={dataReceived.driver.contactInfo} route={dataReceived.route} age={dataReceived.driver.age} name={dataReceived.driver.name} busStatus={dataReceived.busStatus}  objectId={dataReceived._id}/>}
+            <div className={""}>
+            <div>
+                <Map/>
             </div>
-            <PanicButton  busDetails={dataReceived}/>
-            </>
+            <div className={"mt-2 flex flex-col items-center absolute w-full"}>
+                <div className="space-y-16">
+                    {isLoading ?<h1> Loading... </h1>:<Card key={dataReceived._id} busNumber={dataReceived.busNumber} busNumberPlate={dataReceived.busNumberPlate} contactInfo={dataReceived.driver.contactInfo} route={dataReceived.route} age={dataReceived.driver.age} name={dataReceived.driver.name} busStatus={dataReceived.busStatus}  objectId={dataReceived._id}/>}
+                </div>
+                <PanicButton className={"absolute left-[20%]"}  busDetails={dataReceived}/>
+            </div>
+            </div>
         )
     }
 }
