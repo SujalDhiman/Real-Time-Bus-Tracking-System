@@ -32,7 +32,7 @@ function Card({busNumber,route ,active,objectId, eta, rating})
                 <div className={"ml-[75%]"}>
                     <p className={"text-yellow-300 text-xl"}>{Array(Number(Math.round(rating))).fill("*").map((e) =><span>*</span>)}{Array(Number(5-Math.round(rating))).fill("*").map((e) =><span className={"text-white"}>*</span>)}<span className={"text-white text-[13px]"}></span></p>
                 </div>
-                <button className={"w-[98%] border-[1px] drop-shadow-md border-black bg-[#38B3F9] h-[35px] text-black rounded-2xl"}><Link to= {`/user/trackVehicle/${objectId}`}>View Bus &#x2192;</Link></button>
+                <Link to= {`/user/trackVehicle/${objectId}`}><button className={"w-[98%] border-[1px] drop-shadow-md border-black bg-[#38B3F9] h-[35px] text-black rounded-2xl"}>View Bus &#x2192;</button></Link>
             </div>
         </div>
     )
