@@ -100,8 +100,16 @@ function PanicButton({busDetails})
     }
 
     return (<>
-    <div className="mt-10 ml-[70%]">
-                <button className="w-20 h-20 border-2 border-red-600 bg-red-600 rounded-full text-white hover:text-gray-400" onClick={panic} >PANIC</button>
+    <div className="mt-10 ml-[70%] flex items-end mb-[30px]">
+    <button
+  className="w-[100px] h-[100px] bg-red-600 border-2 border-red-700 rounded-full text-white text-[20px] focus:outline-none relative overflow-hidden transform transition-transform duration-100 hover:-translate-y-0.5 active:translate-y-0.5 active:bg-red-700 active:scale-95 shadow-custom2"
+  onClick={panic}
+>PANIC!
+  <div className="absolute inset-0 flex items-center justify-center bg-opacity-0 bg-white hover:bg-opacity-30 transition-opacity duration-100 opacity-0 active:opacity-100">
+    PANIC!
+  </div>
+</button>
+
     </div>
     <div className="flex flex-col items-center justify-center">
     {panicDetails.alertSignal === true ? <div className="w-[400px] h-[100px] border-2 bg-black text-white">
@@ -166,8 +174,7 @@ function Map()
 
     return (
         <>
-        <div><h1 className="text-white">latitude :{latitude}  longitude : {longitude} </h1></div>
-            <GoogleMap zoom={10} center={{lat:latitude,lng:longitude}} mapContainerClassName="map-container">
+            <GoogleMap zoom={10} center={{lat:latitude,lng:longitude}} mapContainerClassName="container shadow-custom">
                 { directionsOptions && <MemoizedDirectionsService directionsOptions={directionsOptions} setDirectionsResponse={setDirectionsResponse}/>}
                 {directionsResponse && <>
                     <TrafficLayer/>
@@ -175,7 +182,7 @@ function Map()
                 </>}
                 <MarkerF position={{lat:latitude,lng:longitude}} />
             </GoogleMap>
-            <ul>
+            <ul className="">
                 <div className={"absolute left-1 top-[80%]"}>
                     {progress && progress.map((p) => {return (<li className={p.reached?"text-white":"text-red-700"}>{`* - ${p.distance} ${p.eta}`}</li>)})}
                 </div>
@@ -189,8 +196,8 @@ function Card({busNumber,busNumberPlate,contactInfo,route,age,name,busStatus})
 {
 
     return (
-        <div>
-        <div className="rounded-lg bg-slate-700 w-[400px] text-white">
+        <div className="flex flex-col space-y-5 items-center justify-between mb-[30px]">
+        <div className="rounded-[20px] bg-[#E93F4B] w-[30vw] text-white pt-4 pb-4 pl-6 pr-6 space-y-3 shadow-custom mt-[7vh]">
             <h1>Bus Number :- {busNumber}</h1>
             <h1>Bus Number Plate :- {busNumberPlate}</h1>
             <h1>Driver Name :- {name}</h1>
@@ -200,9 +207,9 @@ function Card({busNumber,busNumberPlate,contactInfo,route,age,name,busStatus})
             })()}0</h2>
             <div className="flex">Bus Status :- &nbsp; {busStatus === "active"?<h1 className="w-[20px] h-[20px] rounded-full bg-green-600"></h1>:<h1 className="w-[20px] h-[20px]rounded-full bg-red-600"></h1>}</div>
         </div>
-        <div className="text-black">
-                Want to give feedback <Link to="/user/feedback" className="text-red-600">click here</Link>
-            </div>
+        <div className="text-[#9A9A9A]">
+                Enjoying your ride? <Link to="/user/feedback" className="text-red-600">Provide feedback</Link>
+        </div>
         </div>
     )
 }
@@ -235,15 +242,15 @@ export function TrackVechicle()
     else
     {
         return (
-            <div className={""}>
-            <div>
+            <div className="w-[100vw] h-[100vh] flex flex-col items-center font-lexend">
+            <div className="mt-[40px]">
                 <Map/>
             </div>
-            <div className={"mt-2 flex flex-col items-center absolute w-full"}>
-                <div className="space-y-16">
+            <div className="flex h-[90vh]">
+                <>
                     {isLoading ?<h1> Loading... </h1>:<Card key={dataReceived._id} busNumber={dataReceived.busNumber} busNumberPlate={dataReceived.busNumberPlate} contactInfo={dataReceived.driver.contactInfo} route={dataReceived.route} age={dataReceived.driver.age} name={dataReceived.driver.name} busStatus={dataReceived.busStatus}  objectId={dataReceived._id}/>}
-                </div>
-                <PanicButton className={"absolute left-[20%]"}  busDetails={dataReceived}/>
+                </>
+                <PanicButton className={""}  busDetails={dataReceived}/>
             </div>
             </div>
         )
