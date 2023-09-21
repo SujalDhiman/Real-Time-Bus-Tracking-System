@@ -14,5 +14,4 @@ router.route("/activeBus/:id").get(activeBusDetails)
 router.route("/bus/:id").post(updateBusDetails)
 router.route("/busRoutes").get(busRoutes);
 
-
 module.exports=router

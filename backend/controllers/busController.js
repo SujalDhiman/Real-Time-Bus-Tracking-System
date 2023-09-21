@@ -2,6 +2,7 @@ const busSchema=require("../model/busModel.js")
 const routeSchema = require("../model/routeModel.js")
 const stationSchema = require("../model/stationModel.js");
 const cloudinary=require("cloudinary")
+const {cache} = require("../Cache/cache");
 
 exports.register=async function(req,res)
 {
@@ -102,14 +103,25 @@ exports.activeBus=async function(req,res)
             select: 'stationName position -_id'
         }
     });
-    console.log(allActiveBuses);
+    //console.log(allActiveBuses);
     if(allActiveBuses.length === 0)
         res.status(400).send("No Active Buses for now")
     else
     {
+        console.log(typeof allActiveBuses);
+
+        const buses = allActiveBuses.map((bus) => {
+            if(cache.get(bus._id.toString()))
+            {
+                bus._doc.progress = cache.get(bus._id.toString());
+                return bus;
+            }
+            return bus;
+        });
+
         res.status(200).json({
             success:true,
-            buses:allActiveBuses
+            buses: buses
         })
     }
 }
@@ -160,6 +172,7 @@ exports.activeBusDetails=async function(req,res)
         }
     });
 
+    bus._doc.progress = cache.get(bus._id.toString());
     res.status(200).json({
         bus
     })
