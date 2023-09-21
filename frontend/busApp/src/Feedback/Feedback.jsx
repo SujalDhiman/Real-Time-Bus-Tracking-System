@@ -4,46 +4,41 @@ import 'react-toastify/dist/ReactToastify.css';
 import { request_url } from "../constant/constants";
 import axios from "axios"
 import { toastPayload } from "../Context/Assets";
+import { useParams } from "react-router-dom";
 
 function Feedback()
 {
-    const [feedbackData,setFeedbackData]=useState({
-        busNumber:"",
-        ratings:0,
-        comments:""
-    })  
-
+    const {id}=useParams()
+    const [comments,setComments]=useState("")  
+    const [index,setIndex]=useState(0)
     async function submitFeedBack()
     {
-        if(feedbackData.busNumber === "" || feedbackData.ratings === 0 || feedbackData.comments === "")
-        {
-            toast.error("Fill All Fields Properly",toastPayload)
-        }
-        else
-        {
-            if(feedbackData.ratings > 5 || feedbackData.ratings < 0)
-            {
-                toast.error("Rating should be between 0 and 5",toastPayload)
+            let payload={
+                busNumber:id,
+                ratings:index,
+                comments
             }
-            else
-            {
-            const response=await axios.post(request_url+"/giveFeedback",feedbackData)
-                toast.success("Fedback was submitted!", toastPayload);
+            console.log(payload)
+            const response=await axios.post(request_url+"/giveFeedback",payload)
+            toast.success("Fedback was submitted!", toastPayload);
             console.log(response)
-            }
-        }
     } 
 
     return (
         <div>
-            <div>
-                <input type="text" value={feedbackData.busNumber} onChange={(e)=>setFeedbackData({...feedbackData,busNumber:e.target.value})} placeholder="Enter Bus Number"/>
+            <div className="flex">
+                {
+                    Array(5).fill("").map((ele,idx)=>
+                    {
+                        if(idx+1 <= index)
+                        return <h1 key={idx} className="cursor-pointer" onClick={()=>setIndex(idx+1)}>😎</h1>
+                        else
+                        return <h1 key={idx} className="cursor-pointer" onClick={()=>setIndex(idx+1)}>😊</h1>
+                    })
+                }
             </div>
             <div>
-                <input type="number" value={feedbackData.ratings} onChange={(e)=>setFeedbackData({...feedbackData,ratings:e.target.value})} placeholder="Enter Rating" />
-            </div>
-            <div>
-                <textarea type="text" value={feedbackData.comments} onChange={(e)=>setFeedbackData({...feedbackData,comments:e.target.value})} placeholder="Enter Comments"/>
+                <textarea type="text" value={comments} onChange={(e)=>setComments(e.target.value)} placeholder="Enter Comments"/>
             </div>
             <button onClick={submitFeedBack}>
                 Submit

@@ -191,7 +191,7 @@ exports.busRoutes = async function(req, res) {
 exports.getFeedBack=async function(req,res){
 
     const {busNumber,ratings,comments}=req.body
-    if(busNumber === "" && comments === "")
+    if(ratings === "" && comments === "")
     {
         res.status(200).json({
             feedback:false
@@ -199,16 +199,18 @@ exports.getFeedBack=async function(req,res){
     }
     else
     {
-        const feed=await feedbackSchema.create({...req.body})
+        const specificBus=await busSchema.findById(busNumber)
+        
+        const feed=await feedbackSchema.create({busNumber:specificBus.busNumber,ratings,comments})
 
-        const findAllBus=await feedbackSchema.find({busNumber})
+        console.log("bus is",specificBus)
+
+        const findAllBus=await feedbackSchema.find({busNumber:specificBus.busNumber})
         console.log("total feeds",findAllBus.length)
         if(findAllBus)
         {
         const avgRatingCalculated=findAllBus.reduce((initial,value)=>initial+Number(value.ratings),0)
 
-
-        const specificBus=await busSchema.findOne({busNumber})
 
         specificBus.avgRating=avgRatingCalculated/findAllBus.length
 

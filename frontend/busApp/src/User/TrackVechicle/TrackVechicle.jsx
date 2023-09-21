@@ -194,7 +194,7 @@ function Map()
 
 function Card({busNumber,busNumberPlate,contactInfo,route,age,name,busStatus})
 {
-
+    const {id}=useParams()
     return (
         <div className="flex flex-col space-y-5 items-center justify-between mb-[30px]">
         <div className="rounded-[20px] bg-[#E93F4B] w-[30vw] text-white pt-4 pb-4 pl-6 pr-6 space-y-3 shadow-custom mt-[7vh]">
@@ -208,7 +208,7 @@ function Card({busNumber,busNumberPlate,contactInfo,route,age,name,busStatus})
             <div className="flex">Bus Status :- &nbsp; {busStatus === "active"?<h1 className="w-[20px] h-[20px] rounded-full bg-green-600"></h1>:<h1 className="w-[20px] h-[20px]rounded-full bg-red-600"></h1>}</div>
         </div>
         <div className="text-[#9A9A9A]">
-                Enjoying your ride? <Link to="/user/feedback" className="text-red-600">Provide feedback</Link>
+                Enjoying your ride? <Link to={`/user/feedback/${id}`} className="text-red-600">Provide feedback</Link>
         </div>
         </div>
     )
