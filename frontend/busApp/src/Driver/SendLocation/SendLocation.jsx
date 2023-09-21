@@ -211,14 +211,14 @@ export function Map()
             <ul>
                 {progress && progress.map((p) => {return (<li className={p.reached?"text-white":"text-red-700"}>{`* - ${p.distance} ${p.eta}`}</li>)})}
             </ul>
-            <div><h1 className="mt-4 ml-2 text-black">latitude :{differedLatitude}  longitude : {differedLongitude} </h1></div>
-            <div className="flex fixed space-x-10">
-                <button className={`mt-10 h-20 w-24 border-2 ${ toggle === "pause" ?"border-yellow-300 text-red-500 rounded-full bg-yellow-500":"border-green-700 text-white rounded-full bg-green-700"}`} onClick={monitorStatus} id={toggle}>
+            
+            <div className="mt-10 flex justify-evenly items-center h-20">
+                <button className={`${toggle === 'pause'? 'h-20 w-20 text-white font-bold': 'h-20 w-20 text-white font-bold'}  ${toggle === 'pause'? 'rounded-full bg-yellow-500': ' rounded-full bg-green-700'}`}  onClick={monitorStatus}  id={toggle}>
                     {toggle.toUpperCase()}
                 </button>
                 
-                <button className="mt-10 h-20 w-24 border-2 border-red-700 text-black rounded-full bg-red-500" onClick={monitorStatus} id="stop">
-                    Stop
+                <button className="h-20 w-20 border-2  text-white font-bold rounded-full bg-red-700" onClick={monitorStatus} id="stop">
+                    STOP
                 </button>
             </div>
         </>
