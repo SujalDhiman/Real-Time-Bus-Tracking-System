@@ -17,6 +17,7 @@ import { ToastContainer, Zoom, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { toastPayload } from "../../Context/Assets"
 import stopAudio from "./stop.mp4"
+import {unmountComponentAtNode} from "react-dom";
 
 
 
@@ -138,7 +139,9 @@ function Map()
         socket.on(`busLocation-${id}`,(payload)=>{
             setLatitude(payload.latitude)
             setLongitude(payload.longitude)
-            setProgress(payload.progress)}
+            setProgress(payload.progress)
+            console.log(payload);
+        }
         )
     }, [])
 

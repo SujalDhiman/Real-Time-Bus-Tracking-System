@@ -23,7 +23,7 @@ function Card({busNumber,route ,active,objectId, eta, rating})
             <div className={"relative top-[-35px]"}>
                 <h1 className={"font-bold text-2xl ml-[75%]"}>Bus: {busNumber}</h1>
                 <div className={"ml-[75%]"}>
-                    <p className={"text-yellow-300"}>***** <span className={"text-white text-[13px]"}>(443)</span></p>
+                    <p className={"text-yellow-300"}>{Array(Number(Math.round(rating))).fill("*").map((e) =><span>*</span>)}{Array(Number(5-Math.round(rating))).fill("*").map((e) =><span className={"text-white"}>*</span>)}<span className={"text-white text-[13px]"}>(443)</span></p>
                 </div>
                 <button className={"w-[98%] border-[1px] drop-shadow-md border-black bg-[#38B3F9] h-[35px] text-black rounded-2xl"}><Link to= {`/user/trackVehicle/${objectId}`}>View Bus &#x2192;</Link></button>
             </div>

@@ -28,6 +28,7 @@ function Feedback()
             else
             {
             const response=await axios.post(request_url+"/giveFeedback",feedbackData)
+                toast.success("Fedback was submitted!", toastPayload);
             console.log(response)
             }
         }
