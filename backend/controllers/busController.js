@@ -186,6 +186,23 @@ exports.getFeedBack=async function(req,res){
     else
     {
         const feed=await feedbackSchema.create({...req.body})
+
+        const findAllBus=await feedbackSchema.find({busNumber})
+        console.log("total feeds",findAllBus.length)
+        if(findAllBus)
+        {
+        const avgRatingCalculated=findAllBus.reduce((initial,value)=>initial+Number(value.ratings),0)
+        
+
+        const specificBus=await busSchema.findOne({busNumber})
+
+        specificBus.avgRating=avgRatingCalculated/findAllBus.length
+            
+        console.log("avg",avgRatingCalculated)
+        
+        specificBus.save({validateBeforeSave:false})
+        }
+
         res.status(200).json({
             success:true,
             feed
@@ -220,12 +237,10 @@ exports.searchFeedBack=async function(req,res){
 
     let rating=busFeed.reduce((initial,item)=>initial+Number(item.ratings),0)
 
-    console.log(rating/busFeed.length)
-
     console.log(busFeed)
 
     res.status(200).json({
         success:true,
-        busFeed
+        avgRating:rating/busFeed.length
     })
 }

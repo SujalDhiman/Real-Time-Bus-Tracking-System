@@ -4,7 +4,7 @@ import {Link} from "react-router-dom"
 import {axiosConfig, SERVER_URL} from "../../Constants/config.js";
 
 
-function Card({busNumber,route ,active,objectId})
+function Card({busNumber,route ,active,objectId,rating})
 {
     return (
         <div className="rounded-lg bg-slate-700 w-[400px] text-white">
@@ -18,6 +18,9 @@ function Card({busNumber,route ,active,objectId})
                     }
                 )()
             }0</h1>
+            <div>
+            {Array(Number(rating)).map((ele)=><h1>🌝</h1>)}
+            </div>
             <div className="flex space-x-10">Bus Status :- &nbsp;  {active === "active"?<h1 className="w-[20px] h-[20px] rounded-full bg-green-600"></h1>:<h1 className="w-[20px] h-[20px] rounded-full bg-red-600"></h1>}</div>
         </div>
     )
@@ -78,7 +81,7 @@ export function LookupVehicles()
             <button className="px-4 py-2 text-1xl bg-blue-700 text-white rounded-tr-lg rounded-br-lg" onClick={searchLocation}>Search</button>
         </div>
         <div className="space-y-16 mt-10">
-        {(isLoading)?<h1 className="text-white"> Loading... </h1>:dataReceived.map((ele)=><Card busNumber={ele.busNumber}  route={ele.route} active={ele.busStatus} key={ele._id} objectId={ele._id}/>)}
+        {(isLoading)?<h1 className="text-white"> Loading... </h1>:dataReceived.map((ele)=><Card busNumber={ele.busNumber} rating={ele.avgRating} route={ele.route} active={ele.busStatus} key={ele._id} objectId={ele._id}/>)}
         </div>
         </>
     )

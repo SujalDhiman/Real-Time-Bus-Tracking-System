@@ -20,8 +20,6 @@ import stopAudio from "./stop.mp4"
 
 
 
-
-
 const MemoizedDirectionsRenderer = React.memo(({ directions }) => (
     <DirectionsRenderer options={{ directions: directions }} />
 ));
