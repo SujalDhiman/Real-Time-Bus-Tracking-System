@@ -12,6 +12,20 @@ import {MAPS_KEY} from "../../Constants/keys.js";
 import './BusDashboard.css'
 import {MemoizedDirectionsRenderer, MemoizedDirectionsService} from "../SendLocation/SendLocation.jsx";
 
+function LoadMap({busRoute}) {
+    const {isLoaded}=useLoadScript({
+        googleMapsApiKey: MAPS_KEY
+    })
+
+    if(!isLoaded) return <h1 className="text-white">wait plz</h1>
+    else
+        return (
+            <div className={"w-full"}>
+                <Map busRoute={busRoute} className="mt-10"/>
+            </div>
+        )
+}
+
 function Map({busRoute}) {
 
     const [directionsResponse, setDirectionsResponse] = useState(null);
@@ -57,10 +71,6 @@ function BusDashboard()
     const busId=localStorage.getItem("id")
     // const {socket,busId,setBusId}=useContext(SocketContext)
     console.log(busId)
-
-    const {hasLoaded} = (useLoadScript({
-        googleMapsApiKey: MAPS_KEY
-    }));
 
     async function getDetails()
     {
@@ -123,7 +133,7 @@ function BusDashboard()
                             </a>
                         </div>
                     </div>
-                    <Map busRoute={busRoute} className=" mt-[20px] w-[90%] "/>
+                    <LoadMap busRoute={busRoute} className=" mt-[20px] w-[90%] "/>
                 </div>
             </div>
         </div>
