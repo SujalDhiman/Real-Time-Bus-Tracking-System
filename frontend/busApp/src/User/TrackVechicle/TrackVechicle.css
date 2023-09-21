@@ -1,5 +1,6 @@
-.map-container
+.container
 {
-    width: 50%;
-    height:50vh;
+    width: 90vw;
+    height:40vh;
+    border-radius: 20px;
 }
