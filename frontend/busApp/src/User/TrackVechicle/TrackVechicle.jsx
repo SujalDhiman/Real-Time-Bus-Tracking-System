@@ -17,6 +17,7 @@ import { ToastContainer, Zoom, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { toastPayload } from "../../Context/Assets"
 import stopAudio from "./stop.mp4"
+import {unmountComponentAtNode} from "react-dom";
 
 
 
@@ -75,7 +76,7 @@ function PanicButton({busDetails})
     },[])
 
     //sending the EVENT
-    async function panic()
+    function panic()
     {
         console.log("pressed")
         let payload={
@@ -95,13 +96,11 @@ function PanicButton({busDetails})
             `
         }
 
-        const response= await axios.post(`https://sos-message.azurewebsites.net/api/sos-mail?code=_kVVzKkAx9GlalN6MWe7l9QGTMsRH9MKckEB5_ysjPzgAzFucyZDmg==`,sosPayload);
-        console.log(response);
-
+        axios.post(`https://sos-message.azurewebsites.net/api/sos-mail?code=_kVVzKkAx9GlalN6MWe7l9QGTMsRH9MKckEB5_ysjPzgAzFucyZDmg==`,sosPayload).then((response) => console.log(response));
     }
 
     return (<>
-    <div className="mt-10">
+    <div className="mt-10 ml-[70%]">
                 <button className="w-20 h-20 border-2 border-red-600 bg-red-600 rounded-full text-white hover:text-gray-400" onClick={panic} >PANIC</button>
     </div>
     <div className="flex flex-col items-center justify-center">
@@ -140,7 +139,9 @@ function Map()
         socket.on(`busLocation-${id}`,(payload)=>{
             setLatitude(payload.latitude)
             setLongitude(payload.longitude)
-            setProgress(payload.progress)}
+            setProgress(payload.progress)
+            console.log(payload);
+        }
         )
     }, [])
 
@@ -175,7 +176,9 @@ function Map()
                 <MarkerF position={{lat:latitude,lng:longitude}} />
             </GoogleMap>
             <ul>
-                {progress && progress.map((p) => {return (<li className={p.reached?"text-white":"text-red-700"}>{`* - ${p.distance} ${p.eta}`}</li>)})}
+                <div className={"absolute left-1 top-[80%]"}>
+                    {progress && progress.map((p) => {return (<li className={p.reached?"text-white":"text-red-700"}>{`* - ${p.distance} ${p.eta}`}</li>)})}
+                </div>
             </ul>
 
         </>
@@ -232,13 +235,17 @@ export function TrackVechicle()
     else
     {
         return (
-            <>
-            <Map/>
-            <div className="space-y-16">
-            {isLoading ?<h1> Loading... </h1>:<Card key={dataReceived._id} busNumber={dataReceived.busNumber} busNumberPlate={dataReceived.busNumberPlate} contactInfo={dataReceived.driver.contactInfo} route={dataReceived.route} age={dataReceived.driver.age} name={dataReceived.driver.name} busStatus={dataReceived.busStatus}  objectId={dataReceived._id}/>}
+            <div className={""}>
+            <div>
+                <Map/>
             </div>
-            <PanicButton  busDetails={dataReceived}/>
-            </>
+            <div className={"mt-2 flex flex-col items-center absolute w-full"}>
+                <div className="space-y-16">
+                    {isLoading ?<h1> Loading... </h1>:<Card key={dataReceived._id} busNumber={dataReceived.busNumber} busNumberPlate={dataReceived.busNumberPlate} contactInfo={dataReceived.driver.contactInfo} route={dataReceived.route} age={dataReceived.driver.age} name={dataReceived.driver.name} busStatus={dataReceived.busStatus}  objectId={dataReceived._id}/>}
+                </div>
+                <PanicButton className={"absolute left-[20%]"}  busDetails={dataReceived}/>
+            </div>
+            </div>
         )
     }
 }

@@ -7,6 +7,8 @@ const { createServer } = require("http");
 const { Server } = require("socket.io");
 const expressFileUpload=require("express-fileupload")
 const cloudinary=require("cloudinary")
+const {cache} = require("./Cache/cache");
+
 
 
 //enabling cloudinary for image upload
@@ -55,7 +57,10 @@ const io = new Server(httpServer, {
 
 io.on("connection", (socket) => {
     socket.on("busId",(payload)=>{
-        console.log(payload)
+        console.log(payload);
+
+    cache.set(payload.id, payload);
+    console.log(cache);
     console.log(`busLocation-${payload.id}`)
     io.emit(`busLocation-${payload.id}`,payload)})
 
