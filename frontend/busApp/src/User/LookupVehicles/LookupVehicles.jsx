@@ -4,20 +4,20 @@ import {Link} from "react-router-dom"
 import {axiosConfig, SERVER_URL} from "../../Constants/config.js";
 
 
-function Card({busNumber,route ,active,objectId})
+function Card({busNumber,route ,active,objectId, eta})
 {
     return (
         <div className="ml-2 rounded-2xl bg-[#E93F4B] w-[400px] h-[190px] text-white p-4">
-            <h1 className={"font-bold text-2xl"}>ETA: N/A</h1>
+            <h1 className={"font-bold text-2xl"}>ETA: {(eta)?eta.progress?eta.progress[eta.progress.length-1].eta:"N/A":"N/A"}</h1>
             <div className={"relative"}>
                 <div className={"flex flex-row gap-[5px] items-center"}>
                     <div className="w-3 h-3 bg-[#38B3F9] rounded-full "></div>
-                    <p className={"p-0 m-0"}>Destination</p>
+                    <p className={"p-0 m-0"}>{route.stations[route.stations.length - 1].stationName}</p>
                 </div>
                 <div className="relative mt-[-5px] mb-[-5px] left-[5px] border-l-2 border-black h-[35px]"></div>
                 <div className={"flex flex-row gap-[5px] items-center"}>
                     <div className="w-3 h-3 bg-[#38B3F9] rounded-full "></div>
-                    <p className={"p-0 m-0"}>Source</p>
+                    <p className={"p-0 m-0"}>{route.stations[0].stationName}</p>
                 </div>
             </div>
             <div className={"relative top-[-35px]"}>
@@ -89,7 +89,7 @@ export function LookupVehicles()
             <button className="px-4 py-2 text-1xl bg-blue-700 text-white rounded-tr-lg rounded-br-lg" onClick={searchLocation}>Search</button>
         </div>
         <div className="space-y-16 mt-10">
-        {(isLoading)?<h1 className="text-white"> Loading... </h1>:dataReceived.map((ele)=><Card busNumber={ele.busNumber}  route={ele.route} active={ele.busStatus} key={ele._id} objectId={ele._id}/>)}
+        {(isLoading)?<h1 className="text-white"> Loading... </h1>:dataReceived.map((ele)=><Card busNumber={ele.busNumber}  route={ele.route} active={ele.busStatus} eta={ele.progress} key={ele._id} objectId={ele._id}/>)}
         </div>
         </>
     )
