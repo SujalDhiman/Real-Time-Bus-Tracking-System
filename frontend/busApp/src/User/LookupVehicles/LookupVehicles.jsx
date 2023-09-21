@@ -18,8 +18,8 @@ function Card({busNumber,route ,active,objectId,rating})
                     }
                 )()
             }0</h1>
-            <div>
-            {Array(Number(rating)).map((ele)=><h1>🌝</h1>)}
+            <div className={"flex flex-row"}>
+            {Array(Number(rating)).fill("*").map((ele)=> <h1>✨</h1>)}
             </div>
             <div className="flex space-x-10">Bus Status :- &nbsp;  {active === "active"?<h1 className="w-[20px] h-[20px] rounded-full bg-green-600"></h1>:<h1 className="w-[20px] h-[20px] rounded-full bg-red-600"></h1>}</div>
         </div>
