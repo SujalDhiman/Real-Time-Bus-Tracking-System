@@ -1,10 +1,10 @@
-import React, { useState,useEffect } from "react"
+import { useState,useEffect } from "react"
 import axios from "axios"
 import {Link} from "react-router-dom"
 import {axiosConfig, SERVER_URL} from "../../Constants/config.js";
 
 
-function Card({busNumber,route ,active,objectId, eta})
+function Card({busNumber,route ,active,objectId, eta, rating})
 {
     return (
         <div className="ml-2 rounded-2xl bg-[#E93F4B] w-[400px] h-[190px] text-white p-4">
@@ -89,7 +89,7 @@ export function LookupVehicles()
             <button className="px-4 py-2 text-1xl bg-blue-700 text-white rounded-tr-lg rounded-br-lg" onClick={searchLocation}>Search</button>
         </div>
         <div className="space-y-16 mt-10">
-        {(isLoading)?<h1 className="text-white"> Loading... </h1>:dataReceived.map((ele)=><Card busNumber={ele.busNumber}  route={ele.route} active={ele.busStatus} eta={ele.progress} key={ele._id} objectId={ele._id}/>)}
+        {(isLoading)?<h1 className="text-white"> Loading... </h1>:dataReceived.map((ele)=><Card busNumber={ele.busNumber} rating={ele.avgRating} route={ele.route} active={ele.busStatus} eta={ele.progress} key={ele._id} objectId={ele._id}/>)}
         </div>
         </>
     )

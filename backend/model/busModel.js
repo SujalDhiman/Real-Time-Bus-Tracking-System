@@ -25,6 +25,10 @@ const busSchema=new mongoose.Schema({
             minlength:[6,"Password Should Contain Atleast 6 Characters"]
         }
     },
+    avgRating:{
+        type:Number,
+        default:0
+    },
     route: {
         ref: "Route",
         type: mongoose.Schema.Types.ObjectId

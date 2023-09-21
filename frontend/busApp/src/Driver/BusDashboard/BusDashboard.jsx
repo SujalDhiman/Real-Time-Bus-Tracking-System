@@ -18,6 +18,8 @@ function Map({busRoute}) {
     const [directionsOptions, setDirectionsOptions] = useState();
 
     useEffect(()=>{
+        if(!busRoute)
+            return;
         const waypoints = [];
         busRoute.stations.map((station) => {
             waypoints.push({"location": `${station.position[0]} ${station.position[1]}`, "stopover": true});

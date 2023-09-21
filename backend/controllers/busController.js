@@ -3,6 +3,7 @@ const routeSchema = require("../model/routeModel.js")
 const stationSchema = require("../model/stationModel.js");
 const cloudinary=require("cloudinary")
 const {cache} = require("../Cache/cache");
+const feedbackSchema=require("../model/feedbackModel.js")
 
 exports.register=async function(req,res)
 {
@@ -185,4 +186,75 @@ exports.busRoutes = async function(req, res) {
         success: true,
         routes: allRoutes
     });
+}
+
+exports.getFeedBack=async function(req,res){
+
+    const {busNumber,ratings,comments}=req.body
+    if(busNumber === "" && comments === "")
+    {
+        res.status(200).json({
+            feedback:false
+        })
+    }
+    else
+    {
+        const feed=await feedbackSchema.create({...req.body})
+
+        const findAllBus=await feedbackSchema.find({busNumber})
+        console.log("total feeds",findAllBus.length)
+        if(findAllBus)
+        {
+        const avgRatingCalculated=findAllBus.reduce((initial,value)=>initial+Number(value.ratings),0)
+
+
+        const specificBus=await busSchema.findOne({busNumber})
+
+        specificBus.avgRating=avgRatingCalculated/findAllBus.length
+
+        console.log("avg",avgRatingCalculated)
+
+        specificBus.save({validateBeforeSave:false})
+        }
+
+        res.status(200).json({
+            success:true,
+            feed
+        })
+    }}
+
+exports.allFeedBack=async function(req,res){
+
+    const allFeeds=await feedbackSchema.find()
+
+    if(allFeeds.length === 0)
+    {
+        res.status(200).json({
+            message:"No feedbacks for now"
+        })
+    }
+    else
+    {
+        res.status(200).json({
+            success:true,
+            allFeeds
+        })
+    }
+}
+
+exports.searchFeedBack=async function(req,res){
+
+    //grabbing bus number from body
+    const {busNumber}=req.body
+
+    const busFeed=await feedbackSchema.find({busNumber})
+
+    let rating=busFeed.reduce((initial,item)=>initial+Number(item.ratings),0)
+
+    console.log(busFeed)
+
+    res.status(200).json({
+        success:true,
+        avgRating:rating/busFeed.length
+    })
 }

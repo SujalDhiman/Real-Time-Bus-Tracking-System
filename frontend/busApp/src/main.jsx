@@ -12,6 +12,7 @@ import LoginDriver from './Driver/LoginDriver/LoginDriver.jsx'
 import RegisterDriver from './Driver/RegisterDriver/RegisterDriver.jsx'
 import BusDashboard from './Driver/BusDashboard/BusDashboard.jsx'
 import BusStatus from './Driver/BusStatus/BusStatus.jsx'
+import Feedback from './Feedback/feedback.jsx'
 const router=createHashRouter([
   {
     path:"/",
@@ -48,6 +49,10 @@ const router=createHashRouter([
       {
         path:"/user/trackVehicle/:id",
         element:<TrackVechicle />
+      },
+      {
+        path:"/user/feedback",
+        element:<Feedback />
       }
     ]
   }

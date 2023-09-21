@@ -20,8 +20,6 @@ import stopAudio from "./stop.mp4"
 
 
 
-
-
 const MemoizedDirectionsRenderer = React.memo(({ directions }) => (
     <DirectionsRenderer options={{ directions: directions }} />
 ));
@@ -188,7 +186,7 @@ function Card({busNumber,busNumberPlate,contactInfo,route,age,name,busStatus})
 {
 
     return (
-        <>
+        <div>
         <div className="rounded-lg bg-slate-700 w-[400px] text-white">
             <h1>Bus Number :- {busNumber}</h1>
             <h1>Bus Number Plate :- {busNumberPlate}</h1>
@@ -199,7 +197,10 @@ function Card({busNumber,busNumberPlate,contactInfo,route,age,name,busStatus})
             })()}0</h2>
             <div className="flex">Bus Status :- &nbsp; {busStatus === "active"?<h1 className="w-[20px] h-[20px] rounded-full bg-green-600"></h1>:<h1 className="w-[20px] h-[20px]rounded-full bg-red-600"></h1>}</div>
         </div>
-        </>
+        <div className="text-black">
+                Want to give feedback <Link to="/user/feedback" className="text-red-600">click here</Link>
+            </div>
+        </div>
     )
 }
 
