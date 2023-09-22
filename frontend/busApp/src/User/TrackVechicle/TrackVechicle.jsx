@@ -219,10 +219,11 @@ export function TrackVechicle()
     const {isLoaded}=useLoadScript({
         googleMapsApiKey: MAPS_KEY
     })
-
+    const {socket}=useContext(SocketContext)       
     const {id}=useParams()
     const [dataReceived,setDataReceived]=useState({})
     const [isLoading,setLoading]=useState(true)
+    const [passenger,setPassenger]=useState(0)
     async function getActiveBusDetails()
     {
         const response=await axios.get(`${SERVER_URL}/api/v1/activeBus/${id}`, axiosConfig)
@@ -237,6 +238,13 @@ export function TrackVechicle()
         getActiveBusDetails()
     },[])
 
+    useEffect(()=>{
+        socket.on("sendCountPassenger",(payload)=>{
+
+            setPassenger(payload.countPassenger)
+        })
+    },[])
+
     if(!isLoaded)
         return <h1>Loading...</h1>
     else
@@ -246,6 +254,7 @@ export function TrackVechicle()
             <div className="mt-[40px]">
                 <Map/>
             </div>
+            <h1>Passenger count :- {passenger}/60</h1>
             <div className="flex h-[90vh]">
                 <>
                     {isLoading ?<h1> Loading... </h1>:<Card key={dataReceived._id} busNumber={dataReceived.busNumber} busNumberPlate={dataReceived.busNumberPlate} contactInfo={dataReceived.driver.contactInfo} route={dataReceived.route} age={dataReceived.driver.age} name={dataReceived.driver.name} busStatus={dataReceived.busStatus}  objectId={dataReceived._id}/>}

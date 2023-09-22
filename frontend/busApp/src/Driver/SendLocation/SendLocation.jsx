@@ -47,6 +47,7 @@ export function Map()
     const [longitude,setLongitude]=useState(0);
     const [busRoute, setBusRoute]=useState();
 
+    const [passengerCount,setPassengerCount]=useState(0)
     //To prevent react batch rendering problems
     const differedLatitude = useDeferredValue(latitude);
     const differedLongitude = useDeferredValue(longitude);
@@ -192,6 +193,30 @@ export function Map()
         }
     }
 
+    //function to update passenger count
+    function updateCount(e)
+    {
+        if(e.target.id === "inc")
+        {
+            if(passengerCount <=59)
+                setPassengerCount(passengerCount+1)
+            else
+                setPassengerCount(passengerCount)
+        }
+        else
+        {
+            if(passengerCount>=1)
+                setPassengerCount(passengerCount-1)
+            else
+                setPassengerCount(passengerCount)
+        }
+    }
+
+    function sendPassengerCount()
+    {
+        socket.emit("count",{countPassenger:passengerCount})
+    }
+
     return (
         <>
         <div className="top-0 left-0 bg-[#E80202] h-[60px] flex items-center justify-center space-x-80 text-white text-3xl">
@@ -226,6 +251,12 @@ export function Map()
                 </div>
             </button>
             </div>
+            <div>
+                <h1>Update Passenger :- {passengerCount}/60</h1>
+                <button id="inc" className="px-4 py-2 bg-blue-700" onClick={updateCount}>+</button>
+                <button id="dec" className="ml-4 px-4 py-2 bg-blue-700" onClick={updateCount}>-</button>
+            </div>
+            <button onClick={sendPassengerCount} className="px-4 py-2 bg-red-600">Update Details</button>
         </>
     )
 }
