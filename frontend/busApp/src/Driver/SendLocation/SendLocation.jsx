@@ -13,6 +13,8 @@ import {Link, useNavigate, useParams } from "react-router-dom"
 import {MAPS_KEY} from "../../Constants/keys.js";
 import axios from "axios";
 import {axiosConfig, SERVER_URL} from "../../Constants/config.js";
+import plus from "../../assets/plus.png"
+import minus from "../../assets/minus.png"
 
 export const MemoizedDirectionsRenderer = React.memo(({ directions }) => (
     <DirectionsRenderer options={{ directions: directions }} />
@@ -196,6 +198,7 @@ export function Map()
     //function to update passenger count
     function updateCount(e)
     {
+        console.log("inc-dec")
         if(e.target.id === "inc")
         {
             if(passengerCount <=59)
@@ -234,11 +237,25 @@ export function Map()
                 { distanceOptions && <MemorizedDistanceService pos={distanceOptions.origins[0]} distanceOptions={distanceOptions} setDistanceResponse={setDistanceResponse}/>}
                 <MarkerF position={{lat:differedLatitude,lng:differedLongitude}} />
             </GoogleMap>
-            <ul className={"absolute left-[4%] font-lexend top-[65%] border-l-[6px] border-red-600 flex flex-col gap-[15px]"}>
+            {/* <ul className={"absolute left-[4%] font-lexend top-[65%] border-l-[6px] border-red-600 flex flex-col gap-[15px]"}>
                 {progress && progress.map((p) => {return (<li className={"ml-[-11px] flex flex-row items-center gap-2"}><div className={p.reached?"w-4 h-4 bg-[#38B3F9] rounded-full":"w-4 h-4 bg-red-600 rounded-full"}></div><p className={p.reached?"text-[#38B3F9]":"text-red-700"}>{`${p.distance} ${p.eta}`}</p></li>)})}
-            </ul>
-            
-            <div className="mt-10 flex justify-evenly items-center h-[100px]">
+            </ul> */}
+            <div className="flex mt-7 justify-center">
+            <div className=" w-[50vw] flex flex-col items-center space-y-2">
+                <h1>Available seats</h1>
+                <div className="rounded-[20px] border-[1px] shadow-custom bg-[#CEF4FE] w-[12vw] h-[8vh] flex items-center justify-center text-[25px]">
+                {passengerCount}/60
+                </div>
+                <div className="flex space-x-[5vw]">
+                <button className="px-4 py-2"><img id="inc"  onClick={updateCount} src={plus} height="50px" width="50px"></img></button>
+                <button className="ml-4 px-4 py-2"><img id="dec" onClick={updateCount} src={minus} height="50px" width="50px"></img></button>
+                </div>
+                <button onClick={sendPassengerCount} className="text-white px-4 py-2 bg-[#FF0000] rounded-full shadow-custom">Update Details
+                </button>
+            </div>
+            <div className="h-[30vh] w-[40vw] flex flex-col items-center space-y-[10vh] border-[1px] border-black shadow-custom rounded-[20px]">
+                <h1 className="text-[20px] mt-3">Location Sharing</h1>
+                <div className="flex space-x-[25vw] items-center">
                 <button className={`h-20 w-20 focus:outline-none relative overflow-hidden transform transition-transform duration-100 hover:-translate-y-0.5 active:translate-y-0.5 active:scale-95 shadow-custom3 ${toggle === 'pause'? ' text-white font-bold': 'text-white font-bold'}  ${toggle === 'pause'? 'rounded-full bg-yellow-500': ' rounded-full bg-green-700'}`}  onClick={monitorStatus}  id={toggle}>
                     {toggle.toUpperCase()}
                     {/* <div className="absolute inset-0 flex items-center justify-center bg-opacity-0 bg-white hover:bg-opacity-30 transition-opacity duration-100 opacity-0 active:opacity-100"> */}
@@ -251,12 +268,8 @@ export function Map()
                 </div>
             </button>
             </div>
-            <div>
-                <h1>Update Passenger :- {passengerCount}/60</h1>
-                <button id="inc" className="px-4 py-2 bg-blue-700" onClick={updateCount}>+</button>
-                <button id="dec" className="ml-4 px-4 py-2 bg-blue-700" onClick={updateCount}>-</button>
             </div>
-            <button onClick={sendPassengerCount} className="px-4 py-2 bg-red-600">Update Details</button>
+            </div>
         </>
     )
 }
