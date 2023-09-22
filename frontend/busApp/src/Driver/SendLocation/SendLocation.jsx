@@ -173,6 +173,7 @@ export function Map()
     //function to pause  and resume GPS
     function monitorStatus(e)
     {
+        console.log(e.target.id)
         if(e.target.id === "pause")
         {
             navigator.geolocation.clearWatch(stopGPS)
@@ -213,10 +214,10 @@ export function Map()
             </ul>
             
             <div className="mt-10 flex justify-evenly items-center h-[100px]">
-                <button className={`h-20 w-20 focus:outline-none relative overflow-hidden transform transition-transform duration-100 hover:-translate-y-0.5 active:translate-y-0.5 active:scale-95 shadow-custom3${toggle === 'pause'? ' text-white font-bold': 'text-white font-bold'}  ${toggle === 'pause'? 'rounded-full bg-yellow-500': ' rounded-full bg-green-700'}`}  onClick={monitorStatus}  id={toggle}>
+                <button className={`h-20 w-20 focus:outline-none relative overflow-hidden transform transition-transform duration-100 hover:-translate-y-0.5 active:translate-y-0.5 active:scale-95 shadow-custom3 ${toggle === 'pause'? ' text-white font-bold': 'text-white font-bold'}  ${toggle === 'pause'? 'rounded-full bg-yellow-500': ' rounded-full bg-green-700'}`}  onClick={monitorStatus}  id={toggle}>
                     {toggle.toUpperCase()}
-                    <div className="absolute inset-0 flex items-center justify-center bg-opacity-0 bg-white hover:bg-opacity-30 transition-opacity duration-100 opacity-0 active:opacity-100">
-                </div>
+                    {/* <div className="absolute inset-0 flex items-center justify-center bg-opacity-0 bg-white hover:bg-opacity-30 transition-opacity duration-100 opacity-0 active:opacity-100"> */}
+
                 </button>
                 
                 <button
