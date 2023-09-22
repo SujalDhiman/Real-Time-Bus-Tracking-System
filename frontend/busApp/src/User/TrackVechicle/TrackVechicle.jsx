@@ -183,9 +183,9 @@ function Map()
                 <MarkerF position={{lat:latitude,lng:longitude}} />
             </GoogleMap>
             <ul className="">
-                <div className={"absolute left-1 top-[80%]"}>
-                    {progress && progress.map((p) => {return (<li className={p.reached?"text-white":"text-red-700"}>{`* - ${p.distance} ${p.eta}`}</li>)})}
-                </div>
+                <ul className={"absolute left-[8%] top-[50%] border-l-[6px] border-red-600 flex flex-col gap-[15px]"}>
+                    {progress && progress.map((p) => {return (<li className={"ml-[-11px] flex flex-row items-center gap-2"}><div className={p.reached?"w-4 h-4 bg-[#38B3F9] rounded-full":"w-4 h-4 bg-red-600 rounded-full"}></div><p className={p.reached?"text-[#38B3F9]":"text-red-700"}>{`${p.distance} ${p.eta}`}</p></li>)})}
+                </ul>
             </ul>
 
         </>

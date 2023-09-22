@@ -208,8 +208,8 @@ export function Map()
                 { distanceOptions && <MemorizedDistanceService pos={distanceOptions.origins[0]} distanceOptions={distanceOptions} setDistanceResponse={setDistanceResponse}/>}
                 <MarkerF position={{lat:differedLatitude,lng:differedLongitude}} />
             </GoogleMap>
-            <ul>
-                {progress && progress.map((p) => {return (<li className={p.reached?"text-white":"text-red-700"}>{`* - ${p.distance} ${p.eta}`}</li>)})}
+            <ul className={"absolute left-[4%] font-lexend top-[65%] border-l-[6px] border-red-600 flex flex-col gap-[15px]"}>
+                {progress && progress.map((p) => {return (<li className={"ml-[-11px] flex flex-row items-center gap-2"}><div className={p.reached?"w-4 h-4 bg-[#38B3F9] rounded-full":"w-4 h-4 bg-red-600 rounded-full"}></div><p className={p.reached?"text-[#38B3F9]":"text-red-700"}>{`${p.distance} ${p.eta}`}</p></li>)})}
             </ul>
             
             <div className="mt-10 flex justify-evenly items-center h-20">
