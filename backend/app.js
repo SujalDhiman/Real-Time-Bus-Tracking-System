@@ -65,9 +65,13 @@ io.on("connection", (socket) => {
     io.emit(`busLocation-${payload.id}`,payload)})
 
     socket.on("panicAlarm",(payload)=>{
-        console.log(payload)
         socket.broadcast.emit("sendAlarm",payload)
     })
+
+    socket.on("count",(payload)=>{
+        io.emit("sendCountPassenger",{countPassenger:payload.countPassenger})
+    })
+
 });
 
 
