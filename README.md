@@ -18,7 +18,6 @@ This repository contains the source code and documentation for a real-time bus t
 4. [Project Structure](#project-structure)
 5. [Deployment](#deployment)
 6. [Chatbot](#chatbot)
-7. [License](#license)
 
 ## Overview
 
@@ -82,10 +81,6 @@ This project is deployed on Azure, providing a scalable and reliable platform fo
 ## Chatbot
 
 The chatbot integrated into this project uses NLP and ML to provide intelligent responses to user queries. It can handle questions about bus routes, estimated arrival times, and other relevant information. 
-
-## License
-
-This project is licensed under the [MIT License](LICENSE). Feel free to use and modify the code according to the terms of this license.
 
 ---
 
