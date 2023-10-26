@@ -89,4 +89,4 @@ This project is licensed under the [MIT License](LICENSE). Feel free to use and 
 
 ---
 
-We hope you find this real-time bus tracking project useful and look forward to your contributions and feedback. If you have any questions or encounter issues, please open an [issue](https://github.com/your-username/real-time-bus-tracking/issues) on our GitHub repository.
+We hope you find this real-time bus tracking project useful and look forward to your contributions and feedback. If you have any questions or encounter issues, please open an [issue](https://github.com/SujalDhiman/Smart-Bharat-Hackathon/issues) on our GitHub repository.
