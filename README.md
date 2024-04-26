@@ -65,7 +65,7 @@ To get a copy of this project up and running on your local machine for developme
 
 ## Project Structure
 
-The project structure is organized as follows:
+The project structure is organized as follows:-
 
 - `FrontEnd/`: Contains the React front-end application.
 - `BackEnd/`: Houses the Express backend and chatbot logic.
