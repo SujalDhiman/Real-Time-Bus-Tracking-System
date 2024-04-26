@@ -6,7 +6,7 @@
 
 ---
 
-This repository contains the source code and documentation for a real-time bus tracking system developed using various technologies, including Tailwind CSS, React, Express, MongoDB, Socket.io, and the Google Maps API. Additionally, the project features a chatbot powered by Natural Language Processing (NLP) and Machine Learning (ML) for improved user interaction.
+This repository contains the source code and documentation for a real-time bus tracking system developed using various technologies, including Tailwind CSS, ReactJS, Express, MongoDB, Socket.io, and the Google Maps API. Additionally, the project features a chatbot powered by Natural Language Processing (NLP) and Machine Learning (ML) for improved user interaction.
 
 ---
 
