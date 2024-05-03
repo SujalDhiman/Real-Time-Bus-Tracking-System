@@ -1,10 +1,15 @@
-const express=require("express")
+import express from "express"
+
+import { upload } from "../middlewares/multer.middleware.js"
+import {register,login,activeBus,updateBusDetails,activeBusDetails, busRoutes,getFeedBack,allFeedBack,searchFeedBack} from "../controllers/busController.js"
+
+
 const router=express.Router()
 
-const {register,login,activeBus,updateBusDetails,activeBusDetails, busRoutes,getFeedBack,allFeedBack,searchFeedBack}=require("../controllers/busController")
-
 //route for register driver
-router.route("/register").post(register)
+router.route("/register").post(upload.fields([{
+    name:"image1"
+}]),register)
 
 //route for login driver
 router.route("/login").post(login)
@@ -31,4 +36,4 @@ router.route("/getFeedbacks").get(allFeedBack)
 router.route("/specificFeedback").post(searchFeedBack)
 
 
-module.exports=router
+export default router

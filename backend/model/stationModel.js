@@ -1,4 +1,4 @@
-const mongoose=require("mongoose")
+import mongoose from "mongoose"
 
 const stationSchema=new mongoose.Schema({
     stationName:{
@@ -10,4 +10,4 @@ const stationSchema=new mongoose.Schema({
     },
 },)
 
-module.exports=mongoose.model("Station",stationSchema)
+export const STATION=mongoose.model("Station",stationSchema)

@@ -1,10 +1,15 @@
-require("dotenv").config()
+import dotenv from "dotenv"
+import httpServer from "./app.js"
+import connectToDB from "./Database/db.js"
+dotenv.config({
+    path:"./.env"
+})
 
-const httpServer=require("./app.js")
+connectToDB().then(()=>{
+    httpServer.listen(process.env.PORT,()=>{
+        console.log("Server running successfully")
+    })
+}).catch((err)=>{
+    console.log("Error in running server")
+})
 
-
-
-httpServer.listen(process.env.PORT,function ()
-{
-    console.log(`Server is up ${process.env.PORT}`);
-});

@@ -1,6 +1,6 @@
-const mongoose=require("mongoose")
-const bcrypt=require("bcrypt")
-const {Router} = require("express");
+import mongoose from "mongoose"
+import bcrypt from "bcrypt"
+
 
 
 const busSchema=new mongoose.Schema({
@@ -62,4 +62,4 @@ busSchema.pre("save",async function (next){
     this.driver.password=await bcrypt.hash(this.driver.password,8);
 })
 
-module.exports=mongoose.model("Bus",busSchema)
+export const BUS=mongoose.model("Bus",busSchema)

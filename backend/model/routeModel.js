@@ -1,4 +1,4 @@
-const mongoose=require("mongoose")
+import mongoose from "mongoose"
 
 const routeSchema=new mongoose.Schema({
     routeName:{
@@ -11,4 +11,4 @@ const routeSchema=new mongoose.Schema({
         }],
 },)
 
-module.exports=mongoose.model("Route",routeSchema)
+export const ROUTE=mongoose.model("Route",routeSchema)
